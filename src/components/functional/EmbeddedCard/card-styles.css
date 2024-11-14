@@ -1,0 +1,48 @@
+/* These are the default styles for a xarta card */
+.xarta-card-styles {
+
+    p {
+        margin-bottom: 12px !important;
+    }
+
+    a {
+        color: #4b31dd !important;
+        text-decoration: underline !important;
+    }
+
+    img {
+        margin: 12px 0 !important;
+    }
+
+    .meta-date {
+        font-family: monospace;
+        font-size: 0.8em;
+        text-align: center !important;
+    }
+
+    .meta-rep {
+        font-family: monospace;
+        font-size: 0.8em;
+        text-align: center !important;
+    }
+
+    h1, h2, h3 {
+        color: black; /* Default text color */
+        font-weight: bold; /* Headers are typically bold */
+    }
+    
+    h1 {
+        font-size: 2em; /* Larger font size for h1 */
+        margin: 0.67em 0; /* Default top and bottom margin */
+    }
+    
+    h2 {
+        font-size: 1.5em; /* Smaller font size than h1 */
+        margin: 0.75em 0; /* Default top and bottom margin */
+    }
+    
+    h3 {
+        font-size: 1.17em; /* Smaller font size than h2 */
+        margin: 0.83em 0; /* Default top and bottom margin */
+    }
+}

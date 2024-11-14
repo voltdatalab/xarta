@@ -1,0 +1,52 @@
+/*
+  Based on TailwindCSS recommendations,
+  consider using classes instead of the `@apply` directive
+  @see https://tailwindcss.com/docs/reusing-styles#avoiding-premature-abstraction
+*/
+#FOOTER_1 {  
+  font: 16px / 24px Barlow, -apple-system, "system-ui", "Segoe UI", Helvetica,
+    Arial, sans-serif;
+}
+
+#DIV_3 {
+  flex-flow: row wrap;
+}
+
+#H6_5 {
+  font: 500 16px / 19.2px;
+}
+
+#A_8 {
+  text-decoration: underline solid rgb(255, 255, 255);
+}
+#DIV_10 {
+  flex-flow: row wrap;
+}
+
+#H6_12,
+#H6_18 {
+  font: 500 16px / 19.2px;
+}
+
+#H6_15 {
+  font: 500 16px / 19.2px;
+}
+
+#DIV_20 {
+  flex-flow: row wrap;
+}
+
+#P_22 {
+  font: 14px / 21px;
+}
+
+#A_23,
+#A_24 {
+  text-decoration: underline solid rgb(255, 255, 255);
+  font: 14px / 21px;
+}
+
+#A_25 {
+  text-decoration: underline solid rgb(255, 255, 255);
+  font: 14px / 21px;
+}
