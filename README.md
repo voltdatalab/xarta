@@ -103,6 +103,7 @@ In order to run both Ghost and Xarta, let's first create a reverse proxy to rout
     - `NEXT_INTERNAL_ROOT_URL`
 - Run `npm ci` to install dependencies.
 - Run `npm run dev`.
+- Access `http://localhost:3001/xarta`
 
 
 ### Production Deployment
