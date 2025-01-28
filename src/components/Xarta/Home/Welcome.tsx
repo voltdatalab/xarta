@@ -13,7 +13,7 @@ export const Welcome = ({ name, org, onNewCard }: { name?: string, org?: string,
                 </>
             }
         </span>
-        <span className="mt-2.5 text-base leading-[22px] tablet:text-lg">
+        <span className="mt-2.5 text-base leading-[22px] tablet:text-lg max-w-[700px] mx-auto">
             {process.env.NEXT_PUBLIC_DEMO_PASSWORD ? <>
                 Esta versão do Xarta serve apenas para mostrar seu funcionamento e dinâmica. Clique em &quot;Editar&quot; para ver a tela de edição ou clique em qualquer outro lugar dos cards abaixo para ver sua versão publicada.
             </> : (org ? `Você está associado à organização ${org}` : null)

@@ -25,6 +25,11 @@ export const PostExample: Story = {
         posts: postsExample,
         isLoading: false,
         isSuccess: true,
-        error: null
+        error: null,
+        tags: [],
+        selectedTags: [],
+        setTitleParam: () => { },
+        setStatusParam: () => { },
+        setSelectedTags: () => { },
     }
 }

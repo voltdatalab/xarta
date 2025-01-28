@@ -9,8 +9,33 @@ import { useGhostUser } from "@/components/functional/GhostUserProvider";
 import { RoundedFullButton } from "./RoundedFullButton";
 import { cn } from "@/lib/utils";
 import Bg from '@/components/Xarta/Home/padronagem-grayscale.png'
+import SearchInput from "./SearchInput";
+import StatusDropdown from "./StatusDropdown";
+import TagSelector from "@/components/functional/EditarCard/TagSelector";
+import { GhostTag } from "@/components/types/GhostTag";
+import { Dispatch, SetStateAction } from "react";
 
-export function InnerHome({ posts = [], isLoading, isSuccess, error }: { posts: Array<GhostPost>, isLoading: boolean, isSuccess: boolean, error: Error | null }) {
+export function InnerHome({
+  posts = [],
+  isLoading,
+  isSuccess,
+  error,
+  tags,
+  selectedTags,
+  setSelectedTags,
+  setTitleParam,
+  setStatusParam
+}: {
+  posts: Array<GhostPost>,
+  isLoading: boolean,
+  isSuccess: boolean,
+  error: Error | null,
+  tags: GhostTag[],
+  selectedTags: GhostTag[],
+  setTitleParam: Dispatch<SetStateAction<string>>,
+  setStatusParam: Dispatch<SetStateAction<string>>,
+  setSelectedTags: (tags: GhostTag[]) => void
+}) {
 
   const router = useRouter(); // Initialize the router instance
 
@@ -36,6 +61,14 @@ export function InnerHome({ posts = [], isLoading, isSuccess, error }: { posts: 
       <Welcome onNewCard={createCard} name={userName} org={organization} />
       <YourCards posts={posts} className="pt-9 pb-5" />
 
+      <div className="flex flex-row gap-x-[18px] pb-6">
+        <SearchInput onChange={(value) => setTitleParam(value)} />
+        <StatusDropdown onChange={(value) => setStatusParam(value)} />
+        <div className="flex flex-row items-center relative z-30">
+          <TagSelector tags={tags} selectedTags={selectedTags} onChange={setSelectedTags} showTitle={false} extraClasses="py-1" wrapperClasses="mt-0" />
+        </div>
+      </div>
+
       {
         isSuccess && (posts.length === 0) ? <div className="mt-6 text-center">Nenhum card encontrado.</div> : null
       }
@@ -56,7 +89,7 @@ export function InnerHome({ posts = [], isLoading, isSuccess, error }: { posts: 
           </div>
         ))}
         <div className="tablet:min-w-[283px] pc:min-w-[295px] ultra:min-w-[320px] justify-items-center content-center contents">
-          <div onClick={createCard} className="overflow-hidden relative flex group w-full min-h-[288px] shadow-md rounded-lg bg-[#F6F6F6] cursor-pointer hover:-translate-y-[1px] active:translate-y-0 transition duration-100" style={{backgroundImage: `url(${Bg.src})`, backgroundSize: 'contain'}}>
+          <div onClick={createCard} className="overflow-hidden relative flex group w-full min-h-[288px] shadow-md rounded-lg bg-[#F6F6F6] cursor-pointer hover:-translate-y-[1px] active:translate-y-0 transition duration-100" style={{ backgroundImage: `url(${Bg.src})`, backgroundSize: 'contain' }}>
             <div className="absolute inset-0 group-hover:bg-[#4B31DD22] transition duration-500"></div>
             <RoundedFullButton className={cn("relative z-10 block w-full max-w-[284px] tablet:inline-block", "mx-auto self-center justify-self-center")} >Criar novo Xarta</RoundedFullButton>
           </div>

@@ -10,6 +10,11 @@ import { fetchTags } from '../ghost-api/admin/fetchTags';
 
 export const ghostApiTagsUrl = `${ROOT_URL}/ghost/api/admin/tags/?limit=all`
 
+export const useTags = () => useQuery({
+    queryKey: ['tags'],
+    queryFn: fetchTags, // Query function to fetch tags
+});
+
 export default function WrapEditarCard({ id }: { id: string; }) {
     const { data: postData, error: postError, isLoading: postLoading } = useQuery({
         queryKey: ['post', id],
@@ -17,10 +22,7 @@ export default function WrapEditarCard({ id }: { id: string; }) {
         enabled: !!id,   // Only run the query if the id exists
     });
 
-    const { data: tagsData, error: tagsError, isLoading: tagsLoading } = useQuery({
-        queryKey: ['tags'],
-        queryFn: fetchTags, // Query function to fetch tags
-    });
+    const { data: tagsData, error: tagsError, isLoading: tagsLoading } = useTags();
 
     if (postLoading || tagsLoading) return <Carregando>
         Carregando Xarta...

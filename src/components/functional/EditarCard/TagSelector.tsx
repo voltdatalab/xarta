@@ -4,13 +4,13 @@ import { GhostTag } from '@/components/types/GhostTag';
 import { ChevronDownIcon } from '../../Xarta/Icons/ChevronDownIcon';
 import { CheckIcon } from '@radix-ui/react-icons';
 import { Label } from '@/components/ui/label';
-import { TagIcon } from '../../Xarta/Icons/TagIcon';
 import { Badge } from '@/components/ui/badge';
 import Tags from './Tags.png';
 import Image from 'next/image'
 import { PUBLIC_GHOST_TAGS_PANEL_URL } from '@/config/config';
+import { cn } from '@/lib/utils';
 
-export function TagSelector({ selectedTags, tags, onChange }: { selectedTags: GhostTag[], tags: GhostTag[], onChange?: (tag: GhostTag[]) => void }) {
+export function TagSelector({ selectedTags = [], tags = [], onChange, showTitle = true, extraClasses = '', wrapperClasses = '' }: { selectedTags?: GhostTag[], tags?: GhostTag[], onChange?: (tag: GhostTag[]) => void, showTitle?: boolean, extraClasses?: string, wrapperClasses?: string }) {
   const [query, setQuery] = useState('');
 
   const filteredTags =
@@ -24,17 +24,16 @@ export function TagSelector({ selectedTags, tags, onChange }: { selectedTags: Gh
     <div className="w-full mx-auto">
 
       <Combobox immediate value={selectedTags} onChange={onChange} multiple>
-        <Combobox.Label>
+        {showTitle ? <Combobox.Label>
           <Label htmlFor="tags">Tags <span className="font-light">(opcional)</span></Label>
-        </Combobox.Label>
+        </Combobox.Label> : null}
 
-        <div className="relative mt-2">
-          <div className="
+        <div className={cn("relative mt-2", wrapperClasses)}>
+          <div className={cn(`
             relative w-full cursor-default overflow-hidden text-left focus:outline-none focus:ring-1 focus:ring-[#4B31DD] focus:border focus:border-[#4B31DD]
-            bg-[#EEEDF2] text-[#3D3D3D] border-0 rounded-md
+            bg-[#EEEDF2] text-[#3D3D3D] border-0 rounded-md 
             flex flex-row items-center
-            ">
-            {/* <TagIcon color='#3D3D3D' className="ml-3 w-4 h-4 text-muted-foreground justify-self-center" /> */}
+          `, extraClasses)}>
             <Image src={Tags} alt="Tags" width={18} height={18} className="ml-3 justify-self-center" />
 
             <Combobox.Input
@@ -96,7 +95,7 @@ export function TagSelector({ selectedTags, tags, onChange }: { selectedTags: Gh
           </Combobox.Options>
         </div>
 
-        <div className="flex items-center space-x-2 text-[#3D3D3D] border-0 p-2 rounded-md">
+        {showTitle ? <div className="flex items-center space-x-2 text-[#3D3D3D] border-0 p-2 rounded-md">
             <div className="flex flex-row grow content-center gap-1">
               {(selectedTags || []).map(t => (
                 <Badge key={t.id} variant="secondary" className="bg-[#4B31DD] hover:bg-[#4B31DD] text-white rounded-full">
@@ -104,7 +103,7 @@ export function TagSelector({ selectedTags, tags, onChange }: { selectedTags: Gh
                 </Badge>
               ))}
             </div>
-          </div>
+          </div> : null}
 
 
       </Combobox>

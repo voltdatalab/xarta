@@ -1,13 +1,13 @@
 import { ROOT_URL } from "@/config/config";
 import { GhostPost } from "../types/GhostPost";
 
-export async function getPosts() {
+export async function getPosts(params: string = '') {
   try {
 
     // Prepare the request to Ghost's Admin API
-    const ghostApiUrl = `${ROOT_URL}/ghost/api/admin/posts/?limit=all&formats=html`;
+    const ghostApiUrl = (params: string = '') => `${ROOT_URL}/ghost/api/admin/posts/?limit=all&formats=html${params}`;
 
-    const ghostResponse = await fetch(ghostApiUrl, {
+    const ghostResponse = await fetch(ghostApiUrl(params), {
       method: 'GET',
       // Pass cookies for authentication
       credentials: 'include',
