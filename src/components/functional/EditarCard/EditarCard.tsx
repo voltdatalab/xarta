@@ -12,6 +12,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { CONFIGURACOES } from "@/config/config";
 import { Toaster } from "@/components/ui/toaster";
+import { GhostTag } from "@/components/types/GhostTag";
 
 export type SetFeatured = {
     setFeatured?: (v: boolean) => void;
@@ -23,6 +24,7 @@ export function EditarCard({
     mode,
     post,
     tags = [],
+    setTags,
     setTitle,
     setCustomExcerpt,
     setMetaDescription,
@@ -58,7 +60,19 @@ export function EditarCard({
                     maxLength={300}
                 />
                 <div className="space-y-2">
-                    <TagSelector tags={tags} selectedTags={post.tags} onChange={setSelectedTags} />
+                    <TagSelector tags={tags} selectedTags={post.tags} onChange={setSelectedTags} onCreate={(e) => {
+                        const newTagObject = {name: e};
+                        // TODO: Remove typecasts below
+                        setTags?.([
+                            ...tags,
+                            newTagObject
+                        ] as GhostTag[]);
+                        setSelectedTags([
+                            ...(post.tags),
+                            newTagObject
+                        ] as GhostTag[]);
+                    }}
+                    />
                 </div>
                 <LabeledInput
                     id="fontes"
@@ -94,7 +108,7 @@ export function EditarCard({
                         </div>
 
                         {codeInjectionTab === 'head' ? (
-                                <Textarea
+                            <Textarea
                                 id={"injection"}
                                 className="bg-[#EEEDF2] border-0 text-[#3D3D3D] mt-2 min-h-[240px] focus:ring-[#4B31DD]"
                                 placeholder="Inclua tags <style> ou <scripts> para customizar o seu Xarta"
@@ -103,18 +117,18 @@ export function EditarCard({
                             />
                         ) : (
                             <Textarea
-                            id={"injection"}
-                            className="bg-[#EEEDF2] border-0 text-[#3D3D3D] mt-2 min-h-[240px] focus:ring-[#4B31DD]"
-                            placeholder="Inclua tags <style> ou <scripts> para customizar o seu Xarta"
-                            value={post.codeinjection_foot ?? ''}
-                            onChange={(e) => setCodeInjectionFoot(e.target.value)}
-                        />
+                                id={"injection"}
+                                className="bg-[#EEEDF2] border-0 text-[#3D3D3D] mt-2 min-h-[240px] focus:ring-[#4B31DD]"
+                                placeholder="Inclua tags <style> ou <scripts> para customizar o seu Xarta"
+                                value={post.codeinjection_foot ?? ''}
+                                onChange={(e) => setCodeInjectionFoot(e.target.value)}
+                            />
                         )}
 
                     </div>
 
                     <div className="mt-5 text-[14px] ">
-                    <span className="font-semibold">Dica:</span> para aplicar um template global com <span className="font-semibold">customização </span> de HTML, acesse a página de <Link target="_blank" href={CONFIGURACOES}><span className="text-[#4B31DD] font-semibold">configurações.</span></Link></div>
+                        <span className="font-semibold">Dica:</span> para aplicar um template global com <span className="font-semibold">customização </span> de HTML, acesse a página de <Link target="_blank" href={CONFIGURACOES}><span className="text-[#4B31DD] font-semibold">configurações.</span></Link></div>
 
                 </div>
             </div>

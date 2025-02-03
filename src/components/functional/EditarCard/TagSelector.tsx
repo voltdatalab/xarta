@@ -10,7 +10,12 @@ import Image from 'next/image'
 import { PUBLIC_GHOST_TAGS_PANEL_URL } from '@/config/config';
 import { cn } from '@/lib/utils';
 
-export function TagSelector({ selectedTags = [], tags = [], onChange, showTitle = true, extraClasses = '', wrapperClasses = '' }: { selectedTags?: GhostTag[], tags?: GhostTag[], onChange?: (tag: GhostTag[]) => void, showTitle?: boolean, extraClasses?: string, wrapperClasses?: string }) {
+export function TagSelector(
+  { selectedTags = [], tags = [], onChange, showTitle = true, extraClasses = '', wrapperClasses = '', onCreate }: 
+  { selectedTags?: GhostTag[], tags?: GhostTag[], onChange?: (tag: GhostTag[]) => void, showTitle?: boolean, extraClasses?: string, wrapperClasses?: string,
+    onCreate?: (tagName: string) => void
+   }
+) {
   const [query, setQuery] = useState('');
 
   const filteredTags =
@@ -56,12 +61,13 @@ export function TagSelector({ selectedTags = [], tags = [], onChange, showTitle 
           <Combobox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white p-2 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
             {filteredTags.length === 0 && query !== '' ? (
               <div className="relative cursor-default select-none py-2 px-10 text-gray-500">
-                Nenhuma tag encontrada. { process.env.NEXT_PUBLIC_DEMO_USERNAME ? null : <a className="font-semibold text-[#4B31DD]" target='_blank' href={PUBLIC_GHOST_TAGS_PANEL_URL}>Gerenciar suas tags.</a> }
+                Nenhuma tag encontrada.
               </div>
             ) : (
               filteredTags.map((tag) => (
                 <Combobox.Option
-                  key={tag.id}
+                  //TODO: Improve tag.id || tag.name
+                  key={tag.id || tag.name}
                   className={({ active }) =>
                     `relative cursor-default select-none py-2 pl-10 pr-4 rounded-md ${active ? 'bg-indigo-600 text-white' : 'text-gray-900'
                     }`
@@ -92,18 +98,31 @@ export function TagSelector({ selectedTags = [], tags = [], onChange, showTitle 
                 </Combobox.Option>
               ))
             )}
+            <div aria-hidden="true" className="flex flex-col justify-items-center items-center">
+              <div className="w-1/2 border-t border-gray-100" />
+            </div>
+           { (query && onCreate) ? <div className="cursor-pointer relative cursor-default select-none py-2 px-10 text-gray-500" onClick={() => {
+            onCreate?.(query);
+            setQuery('');
+           }}>
+              <a className="font-medium text-[#4B31DD]">Adicionar tag <span className="text-black">&quot;{query}&quot;</span></a>
+            </div>   : null }         
+            <div className="relative cursor-pointer select-none py-2 px-10 text-gray-500">
+              {process.env.NEXT_PUBLIC_DEMO_USERNAME ? null : <a className="font-medium text-[#4B31DD]" target='_blank' href={PUBLIC_GHOST_TAGS_PANEL_URL}>Gerenciar suas tags</a>}
+            </div>
           </Combobox.Options>
         </div>
 
         {showTitle ? <div className="flex items-center space-x-2 text-[#3D3D3D] border-0 p-2 rounded-md">
-            <div className="flex flex-row grow content-center gap-1">
-              {(selectedTags || []).map(t => (
-                <Badge key={t.id} variant="secondary" className="bg-[#4B31DD] hover:bg-[#4B31DD] text-white rounded-full">
-                  {t.name}
-                </Badge>
-              ))}
-            </div>
-          </div> : null}
+          <div className="flex flex-row grow content-center gap-1">
+            {(selectedTags || []).map(t => (
+              //TODO: Improve t.id || t.name
+              <Badge key={t.id || t.name} variant="secondary" className="bg-[#4B31DD] hover:bg-[#4B31DD] text-white rounded-full">
+                {t.name}
+              </Badge>
+            ))}
+          </div>
+        </div> : null}
 
 
       </Combobox>

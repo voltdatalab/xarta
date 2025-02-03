@@ -12,6 +12,7 @@ export function PostEditorContainer({ post, tags, mode }: { post: EditarCardProp
             mode={mode}
             post={currentPost}
             tags={currentTags}
+            setTags={setCurrentTags}
             setTitle={(title) => setCurrentPost({ ...currentPost, title })}
             setCustomExcerpt={(custom_excerpt) => setCurrentPost({ ...currentPost, custom_excerpt })}
             setMetaDescription={(meta_description) => setCurrentPost({ ...currentPost, meta_description })}
