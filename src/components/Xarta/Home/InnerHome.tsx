@@ -61,11 +61,11 @@ export function InnerHome({
       <Welcome onNewCard={createCard} name={userName} org={organization} />
       <YourCards posts={posts} className="pt-9 pb-5" />
 
-      <div className="flex flex-row gap-x-[18px] pb-6">
+      <div className="flex flex-row gap-[18px] pb-6 flex-wrap justify-items-center">
         <SearchInput onChange={(value) => setTitleParam(value)} />
         <StatusDropdown onChange={(value) => setStatusParam(value)} />
-        <div className="flex flex-row items-center relative z-30">
-          <TagSelector tags={tags} selectedTags={selectedTags} onChange={setSelectedTags} showTitle={false} extraClasses="py-1" wrapperClasses="mt-0" />
+        <div className="flex flex-row items-center relative z-30 grow">
+          <TagSelector tags={tags} selectedTags={selectedTags} onChange={setSelectedTags} showTitle={false} extraClasses="py-1" wrapperClasses="mt-0 w-full" />
         </div>
       </div>
 

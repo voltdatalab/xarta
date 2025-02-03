@@ -4,7 +4,7 @@ import SearchIcon from './SearchIcon.png'
 
 export default function SearchInput({ onChange }: { onChange?: (value: string) => void }) {
   return (
-    <div className="flex items-center rounded-md grow">
+    <div className="flex items-center rounded-md grow shrink-0 w-full pc:w-auto">
       <div className="flex flex-row items-center bg-[#EEEDF2] rounded-md pl-4 space-x-2 w-full">
         <img src={SearchIcon.src} className='w-[22px] h-[22px]'/>
         <input
