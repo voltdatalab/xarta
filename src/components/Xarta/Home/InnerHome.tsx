@@ -57,8 +57,9 @@ export function InnerHome({
 
   // Redirect if not logged in
   useEffect(() => {
-    console.log({isLoading, isErrorUser, user})
-    if (isErrorUser) {
+    console.log({isLoading, isErrorUser, user});
+    // TODO: Investigate race condition {isErrorUser: null, user: null}
+    if (isErrorUser || ((!isLoading) && (!user))) {
       router.push('/login');
     }
   }, [isLoading, user]);
