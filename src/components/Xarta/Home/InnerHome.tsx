@@ -13,7 +13,7 @@ import SearchInput from "./SearchInput";
 import StatusDropdown from "./StatusDropdown";
 import TagSelector from "@/components/functional/EditarCard/TagSelector";
 import { GhostTag } from "@/components/types/GhostTag";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useEffect } from "react";
 
 export function InnerHome({
   posts = [],
@@ -54,6 +54,14 @@ export function InnerHome({
   const createCard = () => {
     router.push(`/create-card`);
   }
+
+  // Redirect if not logged in
+  // TODO: Check for status of /user/me directly
+  useEffect(() => {
+    if (!(isLoading) && !(user)) {
+      router.push('/login');
+    }
+  }, [isLoading, user]);
 
 
   return (
