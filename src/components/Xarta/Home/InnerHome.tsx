@@ -39,7 +39,7 @@ export function InnerHome({
 
   const router = useRouter(); // Initialize the router instance
 
-  const { user, settings, isLoadingUser } = useGhostUser();
+  const { user, settings, isErrorUser } = useGhostUser();
 
   const userName = user?.name;
   const organization = settings?.title;
@@ -57,7 +57,8 @@ export function InnerHome({
 
   // Redirect if not logged in
   useEffect(() => {
-    if (!(isLoadingUser) && !(user)) {
+    console.log({isLoading, user})
+    if (!(isErrorUser)) {
       router.push('/login');
     }
   }, [isLoading, user]);
