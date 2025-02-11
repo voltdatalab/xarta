@@ -57,7 +57,7 @@ export function InnerHome({
 
   // Redirect if not logged in
   useEffect(() => {
-    console.log({isLoading, user})
+    console.log({isLoading, isErrorUser, user})
     if (isErrorUser) {
       router.push('/login');
     }
