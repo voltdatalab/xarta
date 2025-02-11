@@ -26,7 +26,7 @@ export const useGhostUser = () => {
 // UserProvider component to fetch user data and provide it to children
 export const UserProvider = ({ children }: ChildrenProps) => {
     // Fetch user data using TanStack Query
-    const { data: user, error, isLoading } = useQuery({
+    const { data: user, error, isLoading: isLoadingUser } = useQuery({
         queryKey: ['user'],
         queryFn: fetchGhostUser
     });
@@ -40,6 +40,7 @@ export const UserProvider = ({ children }: ChildrenProps) => {
     return (
         <UserContext.Provider value={{
             user,
+            isLoadingUser,
             settings
         }}>
             {children}
