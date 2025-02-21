@@ -63,6 +63,12 @@ export const UserProvider = ({ children }: ChildrenProps) => {
         })
     }, [])
 
+    console.log('in UserProvider', {
+        user,
+        isLoadingUser,
+        isErrorUser
+    })
+
     // const { data: user, error: isErrorUser, isLoading: isLoadingUser } = useQuery({
     //     queryKey: ['user'],
     //     queryFn: fetchGhostUser
