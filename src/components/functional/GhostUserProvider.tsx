@@ -38,7 +38,7 @@ export const UserProvider = ({ children }: ChildrenProps) => {
     }>({
         user: undefined,
         isErrorUser: undefined,
-        isLoadingUser: false
+        isLoadingUser: true
     });
 
     useEffect(() => {
