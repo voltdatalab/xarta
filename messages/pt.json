@@ -107,6 +107,7 @@
         "ERROR_FETCHING_POST": "Erro ao carregar o post",
         "VIEW_XARTA": "Visualizar Xarta",
         "LANGUAGE": "Idioma",
-        "SELECT_LANGUAGE": "Selecione o idioma"
+        "SELECT_LANGUAGE": "Selecione o idioma",
+        "LANGUAGE_SETTINGS": "Configurações de Idioma"
     }
 }
