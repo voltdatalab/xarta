@@ -106,6 +106,7 @@
         "ERROR_FETCHING_TAGS": "Error loading tags",
         "ERROR_FETCHING_POST": "Error loading post",
         "VIEW_XARTA": "View Xarta",
-        "LANGUAGE": "Language"
+        "LANGUAGE": "Language",
+        "SELECT_LANGUAGE": "Select language"
     }
 }

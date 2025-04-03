@@ -106,6 +106,7 @@
         "ERROR_FETCHING_TAGS": "Erro ao carregar tags",
         "ERROR_FETCHING_POST": "Erro ao carregar o post",
         "VIEW_XARTA": "Visualizar Xarta",
-        "LANGUAGE": "Idioma"
+        "LANGUAGE": "Idioma",
+        "SELECT_LANGUAGE": "Selecione o idioma"
     }
 }
