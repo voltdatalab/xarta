@@ -108,6 +108,7 @@
         "VIEW_XARTA": "Visualizar Xarta",
         "LANGUAGE": "Idioma",
         "SELECT_LANGUAGE": "Selecione o idioma",
-        "LANGUAGE_SETTINGS": "Configurações de Idioma"
+        "LANGUAGE_SETTINGS": "Configurações de Idioma",
+        "NO_LANGUAGES_FOUND": "Nenhum idioma encontrado."
     }
 }
