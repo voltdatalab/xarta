@@ -4,8 +4,14 @@ import { useQuery } from "@tanstack/react-query";
 import { EditarCardProps } from "../functional/EditarCard/EditarCardProps";
 import { fetchTags } from '../ghost-api/admin/fetchTags';
 import { PostEditorContainer } from "../functional/EditarCard/PostEditorContainer";
+import { useTranslations } from "next-intl";
+
+
 
 export function WrapCreateCard() {
+
+    const t = useTranslations('strings');
+
 
     const post: EditarCardProps["post"] = {
         tags: [],
@@ -24,7 +30,7 @@ export function WrapCreateCard() {
         queryFn: fetchTags, // Query function to fetch tags
     });
 
-    if (tagsError) return <div>Error fetching tags: {tagsError.message}</div>;
+    if (tagsError) return <div>{t('ERROR_FETCHING_TAGS')}: {tagsError.message}</div>;
     if (!tagsData || !tagsData.tags.length) return <div>{/*No tags data available*/}</div>;
 
     return <PostEditorContainer mode="create" post={post} tags={tagsData.tags} />;

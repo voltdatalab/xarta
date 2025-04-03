@@ -5,27 +5,33 @@ import { mainFlexContainer } from "./Home/mainFlexContainer";
 import { cn } from "@/lib/utils";
 import { useCallback, useEffect, useState } from "react";
 import { buttonTransitionStyles } from "./Home/RoundedFullButton";
+import { useTranslations } from "next-intl";
 
 export type ScreenType = 'edit' | 'create' | 'login';
 
-export const getButtonText = (type: ScreenType) => {
+
+// TODO: improve types
+export const getButtonText = (type: ScreenType, t: any) => {
   switch (type) {
     case 'edit':
-      return "Salvar alterações";
+      return t('SAVE_CHANGES_BUTTON');
     case "create":
-      return "Criar Usuário";
+      return t('CREATE_USER_BUTTON');
     case "login":
-      return "Fazer Login";
+      return t('LOGIN_BUTTON');
   }
 }
 
 export default function EditarPerfil({ type = 'edit' }: { type?: ScreenType }) {
+
+  const t = useTranslations('strings');
+
   const [canClick, setCanClick] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const router = useRouter();
-  const buttonText = getButtonText(type);
+  const buttonText = getButtonText(type, t);
 
   const performOnClick = useCallback((type: ScreenType) => {
     if ((type === 'edit') || (type === 'create')) {
@@ -53,11 +59,11 @@ export default function EditarPerfil({ type = 'edit' }: { type?: ScreenType }) {
   const getPageTitle = (type: ScreenType) => {
     switch (type) {
       case 'edit':
-        return "Editar Perfil";
+        return t('EDIT_PROFILE_TEXT');
       case 'login':
-        return "Fazer Login";
+        return t('LOGIN_BUTTON');
       case 'create':
-        return 'Criar Usuário';
+        return t('CREATE_USER_TEXT');
     }
   }
 
@@ -86,19 +92,19 @@ export default function EditarPerfil({ type = 'edit' }: { type?: ScreenType }) {
             {type !== 'login' ? (
               <div className="space-y-2">
                 <label htmlFor="username" className="block text-[15px] font-semibold">
-                  Nome de usuário
+                  {t('USERNAME_LABEL')}
                 </label>
                 <input
                   id="username"
                   type="text"
                   className="w-full p-3 rounded-md h-[44px] border-0 bg-[#EEEDF2] text-sm"
-                  placeholder="Digite seu nome de usuário"
+                  placeholder={t('TYPE_YOUR_USERNAME_PLACEHOLDER')}
                 />
               </div>
             ) : null}
             <div className="space-y-2">
               <label htmlFor="email" className="block text-[15px] font-semibold">
-                E-mail
+                {t('EMAIL_LABEL')}
               </label>
               <input
                 id="email"
@@ -106,13 +112,13 @@ export default function EditarPerfil({ type = 'edit' }: { type?: ScreenType }) {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}                
                 className="w-full p-3 rounded-md h-[44px] border-0 bg-[#EEEDF2] text-sm"
-                placeholder="Digite o seu e-mail"
+                placeholder={t('TYPE_YOUR_EMAIL_PLACEHOLDER')}
               />
             </div>
             {(type === 'edit' || type === 'login') ? (
               <div className="space-y-2">
                 <label htmlFor="senha" className="block text-[15px] font-semibold">
-                  Senha
+                  {t('PASSWORD_LABEL')}
                 </label>
                 <input
                   id="senha"
@@ -120,20 +126,20 @@ export default function EditarPerfil({ type = 'edit' }: { type?: ScreenType }) {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="w-full p-3 rounded-md h-[44px] border-0 bg-[#EEEDF2] text-sm"
-                  placeholder="Digite a sua senha"
+                  placeholder={t('TYPE_YOUR_PASSWORD_LABEL')}
                 />
               </div>
             ) : null}
             {(type === 'edit') ? (
               <div className="space-y-2">
                 <label htmlFor="senha" className="block text-[15px] font-semibold">
-                  {type === 'edit' ? "Nova senha" : "Senha"}
+                  {type === 'edit' ? t('NEW_PASSWORD_LABEL') : t('PASSWORD_LABEL')}
                 </label>
                 <input
                   id="nova-senha"
                   type="password"
                   className="w-full p-3 rounded-md h-[44px] border-0 bg-[#EEEDF2] text-sm"
-                  placeholder="Digite sua nova senha"
+                  placeholder={t('TYPE_YOUR_NEW_PASSWORD_PLACEHOLDER')}
                 />
               </div>
             ) : null}

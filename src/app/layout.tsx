@@ -1,19 +1,26 @@
 import type { Metadata } from "next";
+import {NextIntlClientProvider} from 'next-intl';
+import {getLocale} from 'next-intl/server';
+
 import "./globals.css";
+
 
 export const metadata: Metadata = {
   title: "Xarta"
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+  const locale = await getLocale();
+
   return (
-    <html lang="en">
+    <html lang={locale}>
       <body>
-          {children}
+        <NextIntlClientProvider>{children}</NextIntlClientProvider>
       </body>
     </html>
   );

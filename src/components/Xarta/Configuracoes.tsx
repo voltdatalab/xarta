@@ -14,14 +14,18 @@ import { useRouter } from "next/navigation";
 import { buttonTransitionStyles } from "./Home/RoundedFullButton";
 import { LogOut } from "lucide-react";
 import { JWT_TOKEN_KEY } from "../ghost-auth/constants";
+import { useTranslations } from "next-intl";
 
 export function Configuracoes() {
+
+  const t = useTranslations('strings');
+
   const { user: ghostUser } = useGhostUser();
   const { toast } = useToast();
   const router = useRouter();
 
   const user = {
-    name: ghostUser?.name || "Nome do Usuário",
+    name: ghostUser?.name || t('USERNAME_TEXT'),
     profile_image: ghostUser?.profile_image || "",
   };
 
@@ -72,17 +76,17 @@ export function Configuracoes() {
       const data = await res.json();
       if (res.ok) {
         toast({
-          title: "Configurações salvas com sucesso",
+          title: t('SETTINGS_SAVED_SUCCESSFULLY'),
         })
         router.refresh();
       } else {
         toast({
-          title: "Houve um erro ao tentar alterar as configurações",
+          title: t('ERROR_SETTINGS_NOT_SAVED'),
         })
       }
     } catch (error) {
       toast({
-        title: "Houve um erro ao tentar alterar as configurações",
+        title: t('ERROR_SETTINGS_NOT_SAVED'),
       })
     } finally {
       setLoading(false);
@@ -101,45 +105,45 @@ export function Configuracoes() {
           </Avatar>
           <div>
             <div className="text-[18px] font-semibold">{user.name}</div>
-            { process.env.NEXT_PUBLIC_DEMO_USERNAME ? null : <div className="text-sm"><a href="/ghost/#/settings" className="hover:underline" target="_blank"> Gerencie a sua conta no Ghost </a></div>  }
+            { process.env.NEXT_PUBLIC_DEMO_USERNAME ? null : <div className="text-sm"><a href="/ghost/#/settings" className="hover:underline" target="_blank"> {t('MANAGE_GHOST_ACCOUNT_TEXT')} </a></div>  }
           </div>
         </Card>
 
         <Card className="bg-white text-[15px] text-normal overflow-hidden">
           <div className="">
             <button onClick={() => {
-              if (confirm('Deseja mesmo sair da sua conta?')) {
+              if (confirm(t('CONFIRM_SIGNOUT_TEXT'))) {
                 (localStorage ?? {}).removeItem?.(JWT_TOKEN_KEY);
                 fetch(`${ROOT_URL}/ghost/api/admin/session`, {
                   method: 'DELETE'
                 }).then(() => {
-                  alert('Desconectado com sucesso');
+                  alert(t('SIGNED_OUT_SUCCESSFULLY'));
                   router.push(`${NEXT_XARTA_BASE_URL}`);
                 })
               }
             }} className="w-full p-5 text-[#4F4F4F] hover:text-[#4B31DD] hover:bg-[#4B31DD1A] hover:font-semibold hover:text-medium flex flow-row gap-3">
-              <LogOut className="w-5 h-5" /> Sair
+              <LogOut className="w-5 h-5" /> {t('SIGN_OUT_TEXT')}
             </button>
           </div>
         </Card>
 
         <Card className="bg-white text-[15px] text-normal overflow-hidden">
-          <div className="text-[18px] font-semibold px-5 pt-5">Configurações do Template</div>
-          <div className="pt-3 px-5">Os campos de customização HTML abaixo serão aplicados para todos os Xartas do site.</div>
+          <div className="text-[18px] font-semibold px-5 pt-5">{t('TEMPLATE_SETTINGS_TEXT')}</div>
+          <div className="pt-3 px-5">{t('TEMPLATE_EXPLANATION_TEXT')}</div>
           <form onSubmit={handleSave} className="p-5 pb-5 space-y-4">
 
             <div className="space-y-2">
               <label htmlFor="codeinjection_head" className="block text-sm font-medium text-gray-700">
-                Customizar Logo
+                {t('CUSTOMIZE_LOGO_TEXT')}
               </label>
               <p>
-                { process.env.NEXT_PUBLIC_DEMO_USERNAME ? null : <a href="/ghost/#/settings/design/edit" className="hover:underline" target="_blank">- Acesse as configurações no Ghost</a> }
+                { process.env.NEXT_PUBLIC_DEMO_USERNAME ? null : <a href="/ghost/#/settings/design/edit" className="hover:underline" target="_blank">- {t('ACCESS_GHOST_CONFIG_TEXT')}</a> }
               </p>
             </div>
 
             <div className="space-y-2">
               <label htmlFor="codeinjection_head" className="block text-sm font-medium text-gray-700">
-                Customizar Head
+                {t('CUSTOMIZE_HEAD_TEXT')}
               </label>
               <textarea
                 id="codeinjection_head"
@@ -153,7 +157,7 @@ export function Configuracoes() {
 
             <div className="space-y-2 pt-3">
               <label htmlFor="codeinjection_foot" className="block text-sm font-medium text-gray-700 ">
-                Customizar Footer
+                {t('CUSTOMIZE_FOOTER_TEXT')}
               </label>
               <textarea
                 id="codeinjection_foot"
@@ -171,7 +175,7 @@ export function Configuracoes() {
                 className={cn("px-4 py-2 bg-[#4B31DD] text-white rounded-full disabled:opacity-50", buttonTransitionStyles)}
                 disabled={loading}
               >
-                {loading ? "Salvando..." : "Salvar mudanças"}
+                {loading ? t('SAVING_TEXT') : t('SAVE_CHANGES_TEXT')}
               </button>
             </div>
           </form>

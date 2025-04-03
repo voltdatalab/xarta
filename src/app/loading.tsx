@@ -1,7 +1,12 @@
 import { Carregando } from "@/components/Xarta/Home/Carregando";
+import { useTranslations } from "next-intl";
+
 
 export default function LoadingHome() {
+
+    const t = useTranslations('strings');
+
     return <Carregando>
-        Carregando Xarta...
+        {t('LOADING_XARTA')}
     </Carregando>
 }

@@ -7,6 +7,7 @@ import { Carregando } from './Home/Carregando';
 import { getPost } from '../ghost-api/getPost';
 import { fetchPost } from '../ghost-api/admin/fetchPost';
 import { fetchTags } from '../ghost-api/admin/fetchTags';
+import { useTranslations } from 'next-intl';
 
 export const ghostApiTagsUrl = `${ROOT_URL}/ghost/api/admin/tags/?limit=all`
 
@@ -16,6 +17,9 @@ export const useTags = () => useQuery({
 });
 
 export default function WrapEditarCard({ id }: { id: string; }) {
+
+    const t = useTranslations('strings');
+
     const { data: postData, error: postError, isLoading: postLoading } = useQuery({
         queryKey: ['post', id],
         queryFn: () => fetchPost(id), // Query function
@@ -25,10 +29,10 @@ export default function WrapEditarCard({ id }: { id: string; }) {
     const { data: tagsData, error: tagsError, isLoading: tagsLoading } = useTags();
 
     if (postLoading || tagsLoading) return <Carregando>
-        Carregando Xarta...
+        {t('LOADING_XARTA')}
     </Carregando>;
-    if (postError) return <div>Error fetching post: {postError.message}</div>;
-    if (tagsError) return <div>Error fetching tags: {tagsError.message}</div>;
+    if (postError) return <div>{t('ERROR_FETCHING_POST')}: {postError.message}</div>;
+    if (tagsError) return <div>{t('ERROR_FETCHING_TAGS')}: {tagsError.message}</div>;
  
     if (!postData || !postData.posts.length) return <div>{/* No post data available */}</div>;
     if (!tagsData || !tagsData.tags.length) return <div>{/* No tags data available */}</div>;
