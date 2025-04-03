@@ -105,6 +105,7 @@
         "CREATIVE_COMMONS_ALLOWED": "The creator of this Xarta has allowed its reproduction via Creative Commons 4.0 License. Use the code above to embed it on your site or visit <previewlink>this page</previewlink> to see the published post",
         "ERROR_FETCHING_TAGS": "Error loading tags",
         "ERROR_FETCHING_POST": "Error loading post",
-        "VIEW_XARTA": "View Xarta"
+        "VIEW_XARTA": "View Xarta",
+        "LANGUAGE": "Language"
     }
 }

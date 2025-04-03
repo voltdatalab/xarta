@@ -105,6 +105,7 @@
         "CREATIVE_COMMONS_ALLOWED": "O criador desse Xarta permitiu sua reprodução via Licença Creative Commons 4.0. Use o código acima para embedar o código em seu site ou acesse <previewlink>esta página</previewlink> para ver o post publicado.",
         "ERROR_FETCHING_TAGS": "Erro ao carregar tags",
         "ERROR_FETCHING_POST": "Erro ao carregar o post",
-        "VIEW_XARTA": "Visualizar Xarta"
+        "VIEW_XARTA": "Visualizar Xarta",
+        "LANGUAGE": "Idioma"
     }
 }
