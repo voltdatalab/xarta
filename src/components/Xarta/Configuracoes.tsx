@@ -15,6 +15,7 @@ import { buttonTransitionStyles } from "./Home/RoundedFullButton";
 import { LogOut } from "lucide-react";
 import { JWT_TOKEN_KEY } from "../ghost-auth/constants";
 import { useTranslations } from "next-intl";
+import { LanguageSelector, Language } from "../functional/LanguageSelector";
 
 export function Configuracoes() {
 
@@ -32,6 +33,60 @@ export function Configuracoes() {
   const [codeInjectionHead, setCodeInjectionHead] = useState("");
   const [codeInjectionFoot, setCodeInjectionFoot] = useState("");
   const [loading, setLoading] = useState(false);
+  
+  // State for languages and selected language
+  const [languages, setLanguages] = useState<Language[]>([]);
+  const [selectedLanguage, setSelectedLanguage] = useState<Language | undefined>();
+  const [loadingLanguages, setLoadingLanguages] = useState(true);
+  
+  // Fetch available languages and selected language from database
+  useEffect(() => {
+    async function fetchLanguageData() {
+      setLoadingLanguages(true);
+      try {
+        // Fetch available languages from API
+        const languagesRes = await fetch(`${PUBLIC_NEXT_API_BASE_URL}/config/languages`);
+        let availableLanguages: Language[] = [];
+        
+        if (languagesRes.ok) {
+          availableLanguages = await languagesRes.json();
+          setLanguages(availableLanguages);
+        } else {
+          throw new Error('Failed to fetch available languages');
+        }
+        
+        // Fetch selected language from API
+        // TODO: Parallelize requests
+        const selectedLangRes = await fetch(`${PUBLIC_NEXT_API_BASE_URL}/config/selected-language`);
+        if (selectedLangRes.ok) {
+          const data = await selectedLangRes.json();
+          const language = availableLanguages.find(lang => lang.code === data.code);
+          if (language) {
+            setSelectedLanguage(language);
+          } else {
+            // If selected language is not in available languages, use default
+            setSelectedLanguage(availableLanguages[0]);
+          }
+        } else {
+          // If API fails, use browser language or default
+          setSelectedLanguage(availableLanguages[0]);
+        }
+      } catch (error) {
+        console.error("Error fetching language data:", error);
+        // API request failed, show error state or retry
+        setLanguages([]);
+      } finally {
+        setLoadingLanguages(false);
+      }
+    }
+    
+    fetchLanguageData();
+  }, []);
+  
+  // Handle language change
+  const handleLanguageChange = (language: Language) => {
+    setSelectedLanguage(language);
+  };
 
   // Fetch the current code injection settings when the component mounts
   useEffect(() => {
@@ -48,13 +103,14 @@ export function Configuracoes() {
     fetchCodeInjectionSettings();
   }, []);
 
-  // Submit the updated code injection values
+  // Submit the updated code injection values and language settings
   const handleSave = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      const res = await fetch(`${ROOT_URL}/ghost/api/admin/settings`, {
+      // Save code injection settings
+      const codeInjectionRes = await fetch(`${ROOT_URL}/ghost/api/admin/settings`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -73,21 +129,36 @@ export function Configuracoes() {
         })
       });
 
-      const data = await res.json();
-      if (res.ok) {
+      // Save selected language to the database
+      if (selectedLanguage) {
+        try {
+          await fetch(`${PUBLIC_NEXT_API_BASE_URL}/config/selected-language`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ code: selectedLanguage.code }),
+          });
+
+        } catch (langError) {
+          console.error("Error saving language preference:", langError);
+        }
+      }
+
+      if (codeInjectionRes.ok) {
         toast({
           title: t('SETTINGS_SAVED_SUCCESSFULLY'),
-        })
+        });
         router.refresh();
       } else {
         toast({
           title: t('ERROR_SETTINGS_NOT_SAVED'),
-        })
+        });
       }
     } catch (error) {
       toast({
         title: t('ERROR_SETTINGS_NOT_SAVED'),
-      })
+      });
     } finally {
       setLoading(false);
     }
@@ -127,7 +198,18 @@ export function Configuracoes() {
           </div>
         </Card>
 
-        <Card className="bg-white text-[15px] text-normal overflow-hidden">
+        <Card className="bg-white text-[15px] text-normal">
+          <div className="text-[18px] font-semibold px-5 pt-5">{t('LANGUAGE_SETTINGS')}</div>
+          <div className="p-5">
+            <LanguageSelector 
+              selectedLanguage={selectedLanguage}
+              languages={languages}
+              onChange={handleLanguageChange}
+            />
+          </div>
+        </Card>
+
+        <Card className="bg-white text-[15px] text-normal">
           <div className="text-[18px] font-semibold px-5 pt-5">{t('TEMPLATE_SETTINGS_TEXT')}</div>
           <div className="pt-3 px-5">{t('TEMPLATE_EXPLANATION_TEXT')}</div>
           <form onSubmit={handleSave} className="p-5 pb-5 space-y-4">

@@ -6,6 +6,15 @@ if (!ROOT_URL) {
 }
 console.log('ROOT_URL:', ROOT_URL);
 
+// Database configuration
+export const DB_CONFIG = {
+  host: process.env.XARTA_DB_HOST || 'localhost',
+  port: parseInt(process.env.XARTA_DB_PORT || '5432'),
+  database: process.env.XARTA_DB_NAME || 'xarta',
+  user: process.env.XARTA_DB_USER,
+  password: process.env.XARTA_DB_PASSWORD
+};
+
 // These are all used by the api, so we should be able to use the internal route to caddy
 export const config = {
   INTERNAL_GHOST_URL: process.env.INTERNAL_GHOST_URL,
@@ -33,4 +42,3 @@ export const CONFIGURACOES = `/settings`;
 export const EDITAR_PERFIL = `/settings/profile`;
 export const HOME = `/`;
 export const xartaCardContainerPrefix = `xarta-card-container-`;
-

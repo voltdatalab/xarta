@@ -9,7 +9,9 @@
     "lint": "next lint",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "svgr": "npx -y @svgr/cli --out-dir src/svgr -- src/svgr"
+    "svgr": "npx -y @svgr/cli --out-dir src/svgr -- src/svgr",
+    "wait-for-postgres": "bash ./tools/database/wait-for-postgres.sh",
+    "migrate": "bash ./tools/database/migrate.sh"
   },
   "dependencies": {
     "@headlessui/react": "^2.1.2",
