@@ -19,7 +19,7 @@ A dynamic card manager built on top of Ghost CMS.
     ```
     PROJECT_NAME=xarta-myorg
     GHOST_DB_PASSWORD=PleaseChangeThis
-    PUBLIC_URL=http://localhost
+    PUBLIC_URL=http://localhost:3009
     ```
 
 - Call the `./prod/setup.sh` script and follow its instructions:
