@@ -9,6 +9,10 @@ A dynamic card manager built on top of Ghost CMS.
 
 ### Installation with Docker (Recommended)
 
+- Download, install and start [Docker](https://www.docker.com/).
+
+- Clone this repository.
+
 - Create a `.env` file in the project's root folder.
     - Set the `PROJECT_NAME` environment variable. By default, it can be set to `xarta`. Tip: If you plan on having multiple Xarta deployments, you may differentiate them by using different project names, e.g. `xarta-org-1`, `xarta-personal`, etc.
     - Configure the `GHOST_DB_PASSWORD` variable. Note: once set, Mysql will not update your password on env change.
@@ -35,6 +39,8 @@ A dynamic card manager built on top of Ghost CMS.
     ```bash
     . ./prod/up.sh
     ```
+
+- Access `http://localhost:3009/xarta`
 
 - Call `down.sh` script when you wish to stop and remove Xarta containers, but persist the state:
 
