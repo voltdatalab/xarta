@@ -14,15 +14,39 @@ A dynamic card manager built on top of Ghost CMS.
     - Configure the `GHOST_DB_PASSWORD` variable. Note: once set, Mysql will not update your password on env change.
     - Define the `PUBLIC_URL`, e.g. `http://localhost:3009`
 
-For example, this is an example of `.env` file:
+    For example, this is an example of `.env` file:
 
-```
-PROJECT_NAME=xarta-myorg
-GHOST_DB_PASSWORD=PleaseChangeThis
-PUBLIC_URL=http://localhost
-```
+    ```
+    PROJECT_NAME=xarta-myorg
+    GHOST_DB_PASSWORD=PleaseChangeThis
+    PUBLIC_URL=http://localhost
+    ```
 
-- Call the `. ./prod/setup.sh` script and follow its instructions.
+- Call the `./prod/setup.sh` script and follow its instructions:
+
+    ```bash
+    . ./prod/setup.sh
+    ```
+
+- Update the `.env` file as requested.
+
+- Start the server by calling the `up.sh` script: 
+
+    ```bash
+    . ./prod/up.sh
+    ```
+
+- Call `down.sh` script when you wish to stop and remove Xarta containers, but persist the state:
+
+    ```bash
+    . ./prod/down.sh
+    ```
+
+- **⚠️ Dangerous:** Call `reset.sh` script if you want to completely remove all data for the Xarta project:
+
+    ```bash
+    . ./prod/reset.sh
+    ```
 
 
 ## Xarta Customization
