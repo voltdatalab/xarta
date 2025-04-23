@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import db from '@/lib/db';
-import { ensureAuthenticated } from '../selected-language/route';
+import { ensureAuthenticated } from '../selected-language/ensureAuthenticated';
 
 export async function GET(request: NextRequest) {
   try {
