@@ -12,7 +12,7 @@ A dynamic card manager built on top of Ghost CMS.
 - Create a `.env` file in the project's root folder.
     - Set the `PROJECT_NAME` environment variable. By default, it can be set to `xarta`. Tip: If you plan on having multiple Xarta deployments, you may differentiate them by using different project names, e.g. `xarta-org-1`, `xarta-personal`, etc.
     - Configure the `GHOST_DB_PASSWORD` variable. Note: once set, Mysql will not update your password on env change.
-    - Define the `PUBLIC_URL`, e.g. `http://localhost`
+    - Define the `PUBLIC_URL`, e.g. `http://localhost:3009`
 
 For example, this is an example of `.env` file:
 
@@ -22,11 +22,7 @@ GHOST_DB_PASSWORD=PleaseChangeThis
 PUBLIC_URL=http://localhost
 ```
 
-- Call the `. ./setup.sh` script.
-
-- Append the output from the setup script to your `.env`
-
-- Call the `. ./up.sh` script
+- Call the `. ./prod/setup.sh` script and follow its instructions.
 
 
 ## Xarta Customization

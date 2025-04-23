@@ -1,0 +1,147 @@
+name: ${PROJECT_NAME}
+
+services:
+
+  caddy:
+    container_name: ${PROJECT_NAME}-caddy
+    image: caddy
+    environment:
+      PROJECT_NAME: ${PROJECT_NAME}
+    volumes:
+      - ./prod/Caddyfile:/etc/caddy/Caddyfile
+      - entrypoint_caddy_data:/data
+      - entrypoint_caddy_config:/config
+    networks:
+      - frontend
+    ports:
+      # Expose 3009 so that developers can access Xarta via http://localhost:3009
+      - "3009:80"
+
+  next:
+    container_name: ${PROJECT_NAME}-next
+    build: 
+      dockerfile: ./Dockerfile.next
+      args:
+        # Variables for Next.js public and server
+        NEXT_PUBLIC_ROOT_URL: ${PUBLIC_URL}
+        GHOST_ADMIN_API_KEY: ${GHOST_ADMIN_API_KEY}
+        GHOST_CONTENT_API_KEY: ${GHOST_CONTENT_API_KEY}
+        INTERNAL_GHOST_URL: http://${PROJECT_NAME}-caddy
+        NEXT_INTERNAL_ROOT_URL: http://${PROJECT_NAME}-caddy
+        # Used to connect to Xarta Postgres DB
+        XARTA_DB_HOST: ${PROJECT_NAME}-xarta-db
+        XARTA_DB_USER: ${XARTA_DB_USER}
+        XARTA_DB_PASSWORD: ${XARTA_DB_PASSWORD}      
+    command: >
+      bash -c '
+        cd /app &&
+        . ./tools/database/wait-for-postgres.sh && \
+        . ./tools/database/migrate.sh && \
+        node server.js
+      '
+    environment:
+      # TODO: Verify all env vars have been added
+      # Required for get-settings
+      INTERNAL_GHOST_URL: http://${PROJECT_NAME}-caddy
+      GHOST_ADMIN_API_KEY: ${GHOST_ADMIN_API_KEY}
+      GHOST_CONTENT_API_KEY: ${GHOST_CONTENT_API_KEY}
+      # Required for set language
+      NEXT_INTERNAL_ROOT_URL: http://${PROJECT_NAME}-caddy
+      # Used to connect to Xarta Postgres DB
+      # Required for the database scripts
+      XARTA_DB_HOST: ${PROJECT_NAME}-xarta-db
+      XARTA_DB_USER: ${XARTA_DB_USER}
+      XARTA_DB_PASSWORD: ${XARTA_DB_PASSWORD}
+    networks:
+      - frontend
+      - backend
+
+  ghost:
+    container_name: ${PROJECT_NAME}-ghost
+    image: ghost:latest
+    environment:
+        - url=${PUBLIC_URL}
+        - NODE_ENV=production
+        - database__client=mysql
+        - database__connection__host=${PROJECT_NAME}-ghost-db
+        # TODO: Add custom user option?
+        - database__connection__user=root
+        - database__connection__password=${GHOST_DB_PASSWORD:-xarta}
+        - database__connection__database=ghost
+    networks:
+      - frontend
+      - backend
+    volumes:
+      - dev_xarta_ghost_data:/var/lib/ghost/content
+    # Fixes errors when ghost cannot connect to mysql database on init 
+    restart: unless-stopped
+    depends_on:
+      ghost-db:
+        condition: service_healthy    
+
+  ghost-db:
+    image: mysql:8.0
+    container_name: ${PROJECT_NAME}-ghost-db
+    environment:
+      MYSQL_ROOT_PASSWORD: ${GHOST_DB_PASSWORD:-xarta}
+    volumes:
+      - dev_xarta_ghost_db_data:/var/lib/mysql
+    networks:
+      - backend
+    # Required, otherwise ghost will fail during startup
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      retries: 10      
+
+  postgres:
+    image: postgres:17
+    container_name: ${PROJECT_NAME}-xarta-db
+    environment:
+      POSTGRES_USER: ${XARTA_DB_USER}
+      POSTGRES_PASSWORD: ${XARTA_DB_PASSWORD}
+      POSTGRES_DB: "xarta"
+    volumes:
+      - dev_xarta_db_data:/var/lib/postgresql/data
+    networks:
+      - backend
+
+  setup-helper:
+    container_name: ${PROJECT_NAME}-setup-helper
+    build:
+      context: ./tools/setup
+    environment:
+      CADDY_CONTAINER_NAME: "${PROJECT_NAME}-caddy"
+      PROJECT_NAME: ${PROJECT_NAME}
+      GHOST_DB_PASSWORD: ${GHOST_DB_PASSWORD}
+      PUBLIC_URL: ${PUBLIC_URL}
+    profiles: [setup]
+    # Keeps the container running as an interactive terminal
+    tty: true
+    # Used to allow providing input to attach
+    stdin_open: true
+    networks:
+     - backend
+     - frontend
+    depends_on:
+      ghost:
+        condition: service_started
+        restart: false
+
+networks:
+  frontend:
+    name: ${PROJECT_NAME}-frontend
+  backend:
+    name: ${PROJECT_NAME}-backend
+
+volumes:
+  entrypoint_caddy_data:
+    name: ${PROJECT_NAME}_caddy_data
+  entrypoint_caddy_config:
+    name: ${PROJECT_NAME}_caddy_config
+  dev_xarta_ghost_data:
+    name: ${PROJECT_NAME}_ghost_data
+  dev_xarta_db_data:
+    name: ${PROJECT_NAME}_xarta_db_data
+  dev_xarta_ghost_db_data:
+    name: ${PROJECT_NAME}_xarta_ghost_db_data
