@@ -58,10 +58,13 @@ services:
 
   ghost:
     container_name: ${PROJECT_NAME}-ghost
-    image: ghost:latest
+    image: ghost:5.118.0
     environment:
         - url=${PUBLIC_URL}
         - NODE_ENV=production
+        # Disable 2FA
+        # TODO: Consider reenabling
+        - security__staffDeviceVerification=false
         - database__client=mysql
         - database__connection__host=${PROJECT_NAME}-ghost-db
         # TODO: Add custom user option?
