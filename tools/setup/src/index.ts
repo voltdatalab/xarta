@@ -8,6 +8,7 @@ import { checkExistingIntegration } from './checkExistingIntegration';
 import { createIntegrationIfNeeded } from './createIntegrationIfNeeded';
 import { generateXartaDBCredentials } from './generateXartaDBCredentials';
 import { pressAnyKeyToContinue } from './pressAnyKeyToContinue';
+import { verifyEnvVar } from './verifyEnvVar';
 
 const main = async () => {
   const program = new Command();
@@ -34,7 +35,23 @@ const main = async () => {
   
   console.log('\n');
   console.log(`🚀 ${chalk.magentaBright(`Xarta Setup Starting`)}`);
-  console.log(chalk.gray('----------------------------------------'));
+  console.log(chalk.gray('----------------------------------------\n'));
+
+  console.log(chalk.gray('Running environment variable checks:'));
+  const env1 = verifyEnvVar('PROJECT_NAME');
+  const env2 = verifyEnvVar('GHOST_DB_PASSWORD');
+  const env3 = verifyEnvVar('PUBLIC_URL');
+
+  if (!env1 || !env2 || !env3){
+    console.log(chalk.blue(`\nDefine the missing variables in your ${chalk.bold(`.env`)} file and restart the setup script to continue.`));
+    console.log(chalk.blue('For more information, please check the documentation\n'));
+    process.exit(1);
+  }
+  else {
+    console.log((`\n${chalk.green(`✔`)} All environment variables required for the setup have been defined, proceeding...\n`));
+  }
+
+  console.log(chalk.gray('----------------------------------------\n'));
 
   console.log(`${chalk.gray(`We will attempt to connect to Ghost via ${chalk.magentaBright(`http://${INTERNAL_CONTAINER_NAME}`)}`)}\n`);
   console.log(`${chalk.blue(`Please wait, this can take over a minute...`)}`);
@@ -53,7 +70,7 @@ const main = async () => {
     console.log(chalk.gray('----------------------------------------'));
     console.log(chalk.yellow(`⚠️  Please store your admin password securely:`));
     console.log(chalk.white(`Email:    ${chalk.cyan(userCredentials.email)}`));
-    console.log(chalk.white(`Password: ${chalk.cyan('*****')}`));
+    console.log(chalk.white(`Password: ${chalk.cyan(userCredentials.password)}`));
     console.log(chalk.yellow(`We recommend using a password manager to store these credentials.`));
     console.log(chalk.gray('----------------------------------------'));
     console.log('\n');
