@@ -4,7 +4,6 @@ import { INTERNAL_NEXT_API_BASE_URL, PUBLIC_NEXT_API_BASE_URL } from '@/config/c
 export default getRequestConfig(async () => {
 
   try {
-
     const apiUrl = `${INTERNAL_NEXT_API_BASE_URL}/config/selected-language`;
     const locale = await (await fetch(apiUrl)).json();
 
@@ -22,6 +21,16 @@ export default getRequestConfig(async () => {
     };
   } catch (error) {
     console.error(`Error loading translations: `, error);
-    throw error;
+
+    // TODO: This is necessary because of Next.js SSR,
+    // the API will not be running during next build
+
+    const messages = (await import(`../../messages/${`en`}.json`)).default;
+
+    return {
+      locale: `en`,
+      messages
+    };
+
   }
 });
