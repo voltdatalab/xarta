@@ -6,7 +6,7 @@ import { ConfiguracoesTitulo } from "./ConfiguracoesTitulo";
 import { mainFlexContainer } from "./Home/mainFlexContainer";
 import { FormEvent, useEffect, useState } from "react";
 import { useGhostUser } from "../functional/GhostUserProvider";
-import { NEXT_XARTA_BASE_URL, PUBLIC_NEXT_API_BASE_URL, ROOT_URL } from "@/config/config";
+import { NEXT_XARTA_BASE_URL, PUBLIC_NEXT_API_BASE_URL, PUBLIC_NEXT_XARTA_API_WITH_GHOST_BASE, ROOT_URL } from "@/config/config";
 import { useToast } from "../ui/use-toast";
 import { cn } from "@/lib/utils";
 import { Toaster } from "../ui/toaster";
@@ -45,7 +45,7 @@ export function Configuracoes() {
       setLoadingLanguages(true);
       try {
         // Fetch available languages from API
-        const languagesRes = await fetch(`${PUBLIC_NEXT_API_BASE_URL}/config/languages`);
+        const languagesRes = await fetch(`${PUBLIC_NEXT_XARTA_API_WITH_GHOST_BASE}/config/languages`);
         let availableLanguages: Language[] = [];
         
         if (languagesRes.ok) {
@@ -132,7 +132,7 @@ export function Configuracoes() {
       // Save selected language to the database
       if (selectedLanguage) {
         try {
-          await fetch(`${PUBLIC_NEXT_API_BASE_URL}/config/selected-language`, {
+          await fetch(`${PUBLIC_NEXT_XARTA_API_WITH_GHOST_BASE}/config/selected-language`, { 
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',
