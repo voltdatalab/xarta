@@ -1,7 +1,7 @@
 if [ -z "$XARTA_DB_HOST" ]; then
     echo "❌ Error: XARTA_DB_HOST is not set";
     exit 1;
-fi &&
+fi
 
 echo "XARTA_DB_HOST: $XARTA_DB_HOST"
 
