@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import db from '@/lib/db';
 import { ensureAuthenticated } from '../selected-language/ensureAuthenticated';
+import { defaultLanguages } from './defaultLanguages';
 
 export async function GET(request: NextRequest) {
   try {
@@ -22,12 +23,7 @@ export async function GET(request: NextRequest) {
       customLanguages = result.rows[0].value;
     }
 
-    // Return default languages if not found in database
-    const defaultLanguages = [
-      { code: 'en', name: 'English' },
-      { code: 'pt', name: 'Português' }
-    ];
-
+    // Return default languages plus custom languages from database
     return NextResponse.json([
       ...defaultLanguages,
       ...customLanguages

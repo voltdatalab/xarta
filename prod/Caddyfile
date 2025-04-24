@@ -7,7 +7,7 @@
         reverse_proxy {$PROJECT_NAME}-next:3000
     }
 
-    # Also handle /xarta/* paths
+    # Also handle /xarta* paths
     @xartaPaths path /xarta*
     handle @xartaPaths {
         reverse_proxy {$PROJECT_NAME}-next:3000

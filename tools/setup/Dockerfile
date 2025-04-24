@@ -1,3 +1,4 @@
+# TODO: Test with node-alpine
 FROM node:lts
 
 ENV CADDY_CONTAINER_NAME ""

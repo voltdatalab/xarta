@@ -90,7 +90,6 @@ const main = async () => {
 
   // Output integration details
   console.log(chalk.gray('----------------------------------------'));
-  // console.log('\n');
 
   console.log(chalk.gray('* Integration Details:'));
   console.log(chalk.gray('----------------------------------------'));
@@ -102,7 +101,6 @@ const main = async () => {
   const adminApiKey = finalIntegration.api_keys.find(key => key.type === 'admin');
   
   console.log(chalk.gray('  * API Keys:'));
-  // console.log(chalk.gray('----------------------------------------'));
   
   if (contentApiKey) {
     console.log(chalk.gray(`    * Content API Key: ${chalk.gray(contentApiKey.secret)}`));

@@ -15,6 +15,7 @@ services:
       - frontend
     ports:
       # Expose 3009 so that developers can access Xarta via http://localhost:3009
+      # TODO: Consider adding env var for other ports
       - "3009:80"
 
   next:
@@ -62,7 +63,7 @@ services:
     environment:
         - url=${PUBLIC_URL}
         - NODE_ENV=production
-        # Disable 2FA
+        # Disable 2FA so that staff logins don't depend on emails
         # TODO: Consider reenabling
         - security__staffDeviceVerification=false
         - database__client=mysql

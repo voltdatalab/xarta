@@ -38,7 +38,9 @@ COPY . .
 # ENV NEXT_TELEMETRY_DISABLED 1
 RUN mkdir -p /app/public
 # If using npm comment out above and use below instead
-RUN echo $NEXT_PUBLIC_ROOT_URL $INTERNAL_GHOST_URL && npm run build
+# Using echo below to improve debugging during build
+RUN echo "NEXT_PUBLIC_ROOT_URL: $NEXT_PUBLIC_ROOT_URL, INTERNAL_GHOST_URL: $INTERNAL_GHOST_URL" && \
+    npm run build
 
 
 # Production image, copy all the files and run next
@@ -50,7 +52,8 @@ ENV NODE_ENV production
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 # Required for postgres migrations
-# TODO: Remove bash
+# bash is required for migration scripts
+# TODO: Consider removing bash from scripts
 RUN apk add postgresql-client bash
 COPY --from=builder /app/public ./public
 # Set the correct permission for prerender cache

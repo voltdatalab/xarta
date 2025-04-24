@@ -1,8 +1,7 @@
 import { INTERNAL_ROOT_URL } from '@/config/config';
 import { NextRequest, NextResponse } from 'next/server';
 
-// Fetch user using the Ghost Admin cookie
-
+// Fetch user using Ghost Admin cookie
 async function fetchGhostUser(cookie: string) {
   const response = await fetch(`${INTERNAL_ROOT_URL}/ghost/api/admin/users/me/`, {
     headers: {
@@ -19,7 +18,7 @@ async function fetchGhostUser(cookie: string) {
   return data.users[0];
 }
 
-
+// Ensure user is authenticated based on the cookie from the request
 export const ensureAuthenticated = async (request: NextRequest) => {
   console.log('Auth check for', request.url);
   const cookie = request.headers.get('cookie');

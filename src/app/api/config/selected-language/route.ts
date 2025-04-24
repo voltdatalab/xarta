@@ -2,10 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import db from '@/lib/db';
 import { revalidatePath } from 'next/cache';
 import { ensureAuthenticated } from './ensureAuthenticated';
+import { defaultCode } from '../languages/defaultLanguages';
 
 export async function GET() {
-  const defaultCode = 'en';
-
   try {
     const result = await db.query(
       'SELECT value FROM config WHERE key = $1',
@@ -39,8 +38,7 @@ export async function PUT(request: NextRequest) {
     const body = await request.json();
     const { code } = body;
 
-    // TODO: Validate code
-
+    // TODO: Validate code: must be in defaultLanguages or in DB
     if (!code) {
       return NextResponse.json(
         { error: 'Language code is required' },
@@ -48,6 +46,7 @@ export async function PUT(request: NextRequest) {
       );
     }
 
+    // TODO: Use transaction here?
     //Check if the config exists
     const checkResult = await db.query(
       'SELECT id FROM config WHERE key = $1',
