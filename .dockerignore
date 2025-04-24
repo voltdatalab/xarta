@@ -28,6 +28,7 @@ node_modules/
 next-env.d.ts
 /coverage
 .env*.local
+.env
 .vercel
 *.tsbuildinfo
 

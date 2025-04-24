@@ -3,10 +3,13 @@ import { CommonEmbedProps, EmbeddedClient } from "@/app/embed/[id]/EmbeddedClien
 import { useState, useEffect } from "react";
 import { fetchPost } from "../ghost-api/admin/fetchPost";
 import { GhostPost } from "../types/GhostPost";
-
+import { useTranslations } from "next-intl";
 
 
 export const RetryFetchPostEmbed = ({ postId, settings, globalCodeInjection }: CommonEmbedProps) => {
+
+    const t = useTranslations('strings');
+
 
     const [post, setPost] = useState<GhostPost | null>(null);
 
@@ -24,5 +27,5 @@ export const RetryFetchPostEmbed = ({ postId, settings, globalCodeInjection }: C
 
     }, [postId]);
 
-    return <>{post ? <EmbeddedClient post={post} postId={postId} settings={settings} globalCodeInjection={globalCodeInjection} /> : "Carregando rascunho"}</>;
+    return <>{post ? <EmbeddedClient post={post} postId={postId} settings={settings} globalCodeInjection={globalCodeInjection} /> : t('LOADING_DRAFT_TEXT')}</>;
 };

@@ -13,10 +13,13 @@ import Link from "next/link";
 import { CONFIGURACOES } from "@/config/config";
 import { Toaster } from "@/components/ui/toaster";
 import { GhostTag } from "@/components/types/GhostTag";
+import { useTranslations } from "next-intl";
+
 
 export type SetFeatured = {
     setFeatured?: (v: boolean) => void;
 };
+
 
 export type ActionType = 'erase' | 'update' | 'create' | 'unpublish' | 'save' | 'publish' | null;
 
@@ -32,8 +35,11 @@ export function EditarCard({
     setSelectedTags,
     setFeatured,
     setCodeInjectionHead,
-    setCodeInjectionFoot
+    setCodeInjectionFoot,
 }: EditarCardProps & SetFeatured) {
+
+    const t = useTranslations('strings');
+
     const router = useRouter();
 
     const [codeInjectionTab, setCodeInjectionTab] = useState<'head' | 'foot'>('head');
@@ -41,20 +47,20 @@ export function EditarCard({
 
     return (
         <div className={mainFlexContainer}>
-            <TituloPagina title={`${mode === 'create' ? "Criar" : "Editar"} Xarta`} onBack={() => router.back()} />
+            <TituloPagina title={`${mode === 'create' ? t('CREATE_XARTA_TEXT') : t('EDIT_XARTA_TEXT')}`} onBack={() => router.back()} />
             <div className="gap-y-4 grid tablet:grid-cols-2 tablet:gap-x-5">
                 <LabeledInput
                     required={true}
                     id="titulo"
-                    label={<>Título do Xarta <span className="font-light">(obrigatório*)</span></>}
-                    placeholder="Título do Xarta"
+                    label={<>{t('XARTA_TITLE_TEXT')} <span className="font-light">({t('MANDATORY_TEXT')}*)</span></>}
+                    placeholder={t('XARTA_TITLE_TEXT')}
                     value={post.title}
                     onChange={setTitle}
                 />
                 <LabeledInput
                     id="subtitulo"
-                    label={<>Subtítulo do Xarta <span className="font-light">(opcional)</span></>}
-                    placeholder="Subtítulo do Xarta"
+                    label={<>{t('XARTA_EXCERPT_TEXT')} <span className="font-light">({t('OPTIONAL_TEXT')})</span></>}
+                    placeholder={t('XARTA_EXCERPT_TEXT')}
                     value={post.custom_excerpt}
                     onChange={setCustomExcerpt}
                     maxLength={300}
@@ -76,7 +82,7 @@ export function EditarCard({
                 </div>
                 <LabeledInput
                     id="fontes"
-                    label={<>Fontes de informação <span className="font-light">(de onde vieram as informações deste Xarta, opcional)</span></>}
+                    label={<>{t('INFORMATION_SOURCES_TEXT')} <span className="font-light">({t('INFORMATION_SOURCES_EXPLANATION')}, {t('OPTIONAL_TEXT')})</span></>}
                     placeholder=""
                     value={post.meta_description || ''}
                     onChange={setMetaDescription}
@@ -84,26 +90,26 @@ export function EditarCard({
                 <ContentEditor
                     required={true}
                     id="contexto"
-                    label={<>Escreva abaixo o seu texto de contexto <span className="font-light">(obrigatório*)</span></>}
+                    label={<>{t('WRITE_CONTEXT_TEXT')} <span className="font-light">({t('MANDATORY_TEXT')}*)</span></>}
                     htmlContent={post.html}
                     setHtmlContent={setHtmlContent}
                 />
 
                 <div className="space-y-2">
-                    <Label htmlFor={'htmlCustomization'}>Customização HTML <span className="font-light">(opcional)</span></Label>
+                    <Label htmlFor={'htmlCustomization'}>{t('HTML_CUSTOMIZATION_TEXT')} <span className="font-light">({t('OPTIONAL_TEXT')})</span></Label>
                     <div>
                         <div className="flex space-x-1">
                             <button
                                 className={`text-xs py-2 px-4 ${codeInjectionTab === 'head' ? 'bg-[#4B31DD] text-white' : 'bg-gray-200 text-gray-700'} rounded-md`}
                                 onClick={() => setCodeInjectionTab('head')}
                             >
-                                Header
+                                {t('HEADER_BUTTON_TEXT')}
                             </button>
                             <button
                                 className={`text-xs py-2 px-4 ${codeInjectionTab === 'foot' ? 'bg-[#4B31DD] text-white' : 'bg-gray-200 text-gray-700'} rounded-md`}
                                 onClick={() => setCodeInjectionTab('foot')}
                             >
-                                Footer
+                                {t('FOOTER_BUTTON_TEXT')}
                             </button>
                         </div>
 
@@ -111,7 +117,7 @@ export function EditarCard({
                             <Textarea
                                 id={"injection"}
                                 className="bg-[#EEEDF2] border-0 text-[#3D3D3D] mt-2 min-h-[240px] focus:ring-[#4B31DD]"
-                                placeholder="Inclua tags <style> ou <scripts> para customizar o seu Xarta"
+                                placeholder={t.raw('CODE_INJECTION_TEXTAREA_PLACEHOLDER')}
                                 value={post.codeinjection_head ?? ''}
                                 onChange={(e) => setCodeInjectionHead(e.target.value)}
                             />
@@ -119,7 +125,7 @@ export function EditarCard({
                             <Textarea
                                 id={"injection"}
                                 className="bg-[#EEEDF2] border-0 text-[#3D3D3D] mt-2 min-h-[240px] focus:ring-[#4B31DD]"
-                                placeholder="Inclua tags <style> ou <scripts> para customizar o seu Xarta"
+                                placeholder={t.raw('CODE_INJECTION_TEXTAREA_PLACEHOLDER')}
                                 value={post.codeinjection_foot ?? ''}
                                 onChange={(e) => setCodeInjectionFoot(e.target.value)}
                             />
@@ -128,7 +134,13 @@ export function EditarCard({
                     </div>
 
                     <div className="mt-5 text-[14px] ">
-                        <span className="font-semibold">Dica:</span> para aplicar um template global com <span className="font-semibold">customização </span> de HTML, acesse a página de <Link target="_blank" href={CONFIGURACOES}><span className="text-[#4B31DD] font-semibold">configurações.</span></Link></div>
+                        <span className="font-semibold">{t('TIP_TEXT')}:</span> {t.rich('GLOBAL_TEMPLATE_TIP', {
+                            link: (chunks) => <Link target="_blank" href={CONFIGURACOES}>
+                                <span className="text-[#4B31DD] font-semibold">{chunks}</span>
+                            </Link>,
+                            b: (chunks) => <span className="font-semibold">{chunks}</span>
+                        })}
+                    </div>
 
                 </div>
             </div>
@@ -136,7 +148,6 @@ export function EditarCard({
             <Toaster />
 
             <PublicarCard id={post.id} mode={mode} post={post} checked={post.featured} onChange={setFeatured} currentAction={currentAction} setCurrentAction={setCurrentAction} />
-
 
         </div>
     );

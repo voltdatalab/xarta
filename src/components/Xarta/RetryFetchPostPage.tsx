@@ -5,9 +5,14 @@ import { GhostPost } from "../types/GhostPost";
 import { VisualizarCardInner } from "./VisualizarCard";
 import { fetchPost } from "../ghost-api/admin/fetchPost";
 import { ChildrenProps } from "@/lib/utils";
+import { useTranslations } from "next-intl";
+
 
 
 export const RetryFetchPostPage = ({ id }: { id: GhostPost["id"]}) => {
+
+    const t = useTranslations('strings');
+
 
     const [post, setPost] = useState<GhostPost | null>(null);
 
@@ -18,5 +23,5 @@ export const RetryFetchPostPage = ({ id }: { id: GhostPost["id"]}) => {
 
     }, [id]);
 
-    return <>{ post ? <VisualizarCardInner postId={id} postStatus={"draft"} post={post} /> : "Carregando rascunho" }</>;
+    return <>{ post ? <VisualizarCardInner postId={id} postStatus={"draft"} post={post} /> : t('LOADING_DRAFT_TEXT') }</>;
 };

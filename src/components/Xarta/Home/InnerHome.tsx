@@ -14,6 +14,7 @@ import StatusDropdown from "./StatusDropdown";
 import TagSelector from "@/components/functional/EditarCard/TagSelector";
 import { GhostTag } from "@/components/types/GhostTag";
 import { Dispatch, SetStateAction, useEffect } from "react";
+import { useTranslations } from "next-intl";
 
 export function InnerHome({
   posts = [],
@@ -24,7 +25,7 @@ export function InnerHome({
   selectedTags,
   setSelectedTags,
   setTitleParam,
-  setStatusParam
+  setStatusParam,
 }: {
   posts: Array<GhostPost>,
   isLoading: boolean,
@@ -36,6 +37,8 @@ export function InnerHome({
   setStatusParam: Dispatch<SetStateAction<string>>,
   setSelectedTags: (tags: GhostTag[]) => void
 }) {
+
+  const t = useTranslations('strings');
 
   const router = useRouter(); // Initialize the router instance
 
@@ -78,13 +81,13 @@ export function InnerHome({
       </div>
 
       {
-        isSuccess && (posts.length === 0) ? <div className="mt-6 text-center">Nenhum card encontrado.</div> : null
+        isSuccess && (posts.length === 0) ? <div className="mt-6 text-center">{t('NO_CARDS_FOUND_TEXT')}</div> : null
       }
 
       {isLoading ? <Carregando>
-        Carregando Xartas...
+        {t('LOADING_XARTAS')}
       </Carregando> : null}
-      {error ? <div className="mt-6 text-center">Erro ao carregar cards: {error.message}</div> : null}
+      {error ? <div className="mt-6 text-center">{t('ERROR_WHILE_LOADING_CARDS')}: {error.message}</div> : null}
 
       <div className="
         grid 
@@ -99,7 +102,7 @@ export function InnerHome({
         <div className="tablet:min-w-[283px] pc:min-w-[295px] ultra:min-w-[320px] justify-items-center content-center contents">
           <div onClick={createCard} className="overflow-hidden relative flex group w-full min-h-[288px] shadow-md rounded-lg bg-[#F6F6F6] cursor-pointer hover:-translate-y-[1px] active:translate-y-0 transition duration-100" style={{ backgroundImage: `url(${Bg.src})`, backgroundSize: 'contain' }}>
             <div className="absolute inset-0 group-hover:bg-[#4B31DD22] transition duration-500"></div>
-            <RoundedFullButton className={cn("relative z-10 block w-full max-w-[284px] tablet:inline-block", "mx-auto self-center justify-self-center")} >Criar novo Xarta</RoundedFullButton>
+            <RoundedFullButton className={cn("relative z-10 block w-full max-w-[284px] tablet:inline-block", "mx-auto self-center justify-self-center")} >{t('CREATE_NEW_XARTA_TEXT')}</RoundedFullButton>
           </div>
         </div>
       </div>

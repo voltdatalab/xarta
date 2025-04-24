@@ -39,3 +39,5 @@ next-env.d.ts
 
 # Ignore storybook static output files
 storybook-static
+
+.env

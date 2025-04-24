@@ -9,7 +9,9 @@
     "lint": "next lint",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "svgr": "npx -y @svgr/cli --out-dir src/svgr -- src/svgr"
+    "svgr": "npx -y @svgr/cli --out-dir src/svgr -- src/svgr",
+    "wait-for-postgres": "bash ./tools/database/wait-for-postgres.sh",
+    "migrate": "bash ./tools/database/migrate.sh"
   },
   "dependencies": {
     "@headlessui/react": "^2.1.2",
@@ -22,6 +24,7 @@
     "@tanstack/react-query": "^5.51.18",
     "@tryghost/admin-api": "^1.13.12",
     "@tryghost/content-api": "^1.11.21",
+    "@types/pg": "^8.11.11",
     "axios": "^1.7.3",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
@@ -30,6 +33,8 @@
     "lucide-react": "^0.445.0",
     "luxon": "^3.5.0",
     "next": "14.2.5",
+    "next-intl": "^4.0.2",
+    "pg": "^8.14.1",
     "react": "^18",
     "react-copy-to-clipboard": "^5.1.0",
     "react-dom": "^18",

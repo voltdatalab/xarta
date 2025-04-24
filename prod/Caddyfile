@@ -1,0 +1,23 @@
+:80 {
+
+    @ghostXartaApi path_regexp ^/ghost(/xarta/api.*)$
+    handle @ghostXartaApi {
+        # Strip the /ghost prefix from the path, but keep its cookies
+        rewrite * {re.ghostXartaApi.1}
+        reverse_proxy {$PROJECT_NAME}-next:3000
+    }
+
+    # Also handle /xarta* paths
+    @xartaPaths path /xarta*
+    handle @xartaPaths {
+        reverse_proxy {$PROJECT_NAME}-next:3000
+    }
+
+    # Catch-all: proxy everything else to Ghost
+    handle {
+        reverse_proxy {$PROJECT_NAME}-ghost:2368 {
+            # Prevent Ghost HTTPS infinite redirect loop
+            header_up X-Forwarded-Proto https
+        }
+    }
+}

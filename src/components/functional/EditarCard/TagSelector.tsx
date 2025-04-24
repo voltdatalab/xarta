@@ -9,6 +9,7 @@ import Tags from './Tags.png';
 import Image from 'next/image'
 import { PUBLIC_GHOST_TAGS_PANEL_URL } from '@/config/config';
 import { cn } from '@/lib/utils';
+import { useTranslations } from 'next-intl';
 
 export function TagSelector(
   { selectedTags = [], tags = [], onChange, showTitle = true, extraClasses = '', wrapperClasses = '', onCreate }: 
@@ -16,6 +17,9 @@ export function TagSelector(
     onCreate?: (tagName: string) => void
    }
 ) {
+
+  const t = useTranslations('strings');
+
   const [query, setQuery] = useState('');
 
   const filteredTags =
@@ -30,7 +34,7 @@ export function TagSelector(
 
       <Combobox immediate value={selectedTags} onChange={onChange} multiple>
         {showTitle ? <Combobox.Label>
-          <Label htmlFor="tags">Tags <span className="font-light">(opcional)</span></Label>
+          <Label htmlFor="tags">{t('TAGS_TEXT')} <span className="font-light">({t('OPTIONAL_TEXT')})</span></Label>
         </Combobox.Label> : null}
 
         <div className={cn("relative mt-2", wrapperClasses)}>
@@ -39,7 +43,7 @@ export function TagSelector(
             bg-[#EEEDF2] text-[#3D3D3D] border-0 rounded-md 
             flex flex-row items-center
           `, extraClasses)}>
-            <Image src={Tags} alt="Tags" width={18} height={18} className="ml-3 justify-self-center" />
+            <Image src={Tags} alt={t('TAGS_TEXT')} width={18} height={18} className="ml-3 justify-self-center" />
 
             <Combobox.Input
               className="
@@ -48,7 +52,7 @@ export function TagSelector(
               grow"
               onChange={(event) => setQuery(event.target.value)}
               displayValue={(tag: GhostTag) => tag.name}
-              placeholder="Selecione as tags..."
+              placeholder={t('SELECT_TAGS_PLACEHOLDER')}
             />
             <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">
               {/* <ChevronDownIcon
@@ -61,7 +65,7 @@ export function TagSelector(
           <Combobox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white p-2 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
             {filteredTags.length === 0 && query !== '' ? (
               <div className="relative cursor-default select-none py-2 px-10 text-gray-500">
-                Nenhuma tag encontrada.
+                {t('NO_TAGS_FOUND_TEXT')}
               </div>
             ) : (
               filteredTags.map((tag) => (
@@ -105,10 +109,10 @@ export function TagSelector(
             onCreate?.(query);
             setQuery('');
            }}>
-              <a className="font-medium text-[#4B31DD]">Adicionar tag <span className="text-black">&quot;{query}&quot;</span></a>
+              <a className="font-medium text-[#4B31DD]">{t('ADD_TAG_TEXT')} <span className="text-black">&quot;{query}&quot;</span></a>
             </div>   : null }         
             <div className="relative cursor-pointer select-none py-2 px-10 text-gray-500">
-              {process.env.NEXT_PUBLIC_DEMO_USERNAME ? null : <a className="font-medium text-[#4B31DD]" target='_blank' href={PUBLIC_GHOST_TAGS_PANEL_URL}>Gerenciar suas tags</a>}
+              {process.env.NEXT_PUBLIC_DEMO_USERNAME ? null : <a className="font-medium text-[#4B31DD]" target='_blank' href={PUBLIC_GHOST_TAGS_PANEL_URL}>{t('MANAGE_TAGS_TEXT')}</a>}
             </div>
           </Combobox.Options>
         </div>
