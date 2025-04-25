@@ -11,7 +11,7 @@ export type CommonEmbedProps = {
     globalCodeInjection: CodeInjection
 }
 
-export function EmbeddedClient({ post, postId, settings, globalCodeInjection }: { post: GhostPost; } & CommonEmbedProps) {
+export function EmbeddedClient({ post, postId, settings, globalCodeInjection, locale }: { post: GhostPost; locale: string } & CommonEmbedProps) {
     useEffect(() => {
         const resizeObserver = new ResizeObserver((entries) => {
             for (let entry of entries) {
@@ -35,7 +35,7 @@ export function EmbeddedClient({ post, postId, settings, globalCodeInjection }: 
 
     return (
         <div id="embedded-post-container">
-            <EmbeddedCard post={post} settings={settings} globalCodeInjection={globalCodeInjection} />
+            <EmbeddedCard post={post} settings={settings} globalCodeInjection={globalCodeInjection} locale={locale} />
         </div>
     );
 }

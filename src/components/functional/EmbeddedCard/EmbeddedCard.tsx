@@ -9,13 +9,12 @@ import { ROOT_URL } from "@/config/config";
 import { useTranslations } from "next-intl";
 
 
-export function EmbeddedCard({ post, settings, globalCodeInjection }: { post: GhostPost, settings: Settings, globalCodeInjection: CodeInjection }) {
-
+export function EmbeddedCard({ post, settings, globalCodeInjection, locale }: { post: GhostPost, settings: Settings, globalCodeInjection: CodeInjection, locale: string }) {
 
     const t = useTranslations('strings');
 
     // TODO: Use custom date time depending on i18n ?
-    const formattedDate = DateTime.fromISO(post.updated_at).toFormat('dd/MM/yyyy \'às\' HH:mm\'h\'');
+    const formattedDate = DateTime.fromISO(post.updated_at).setLocale(locale).toLocaleString(DateTime.DATETIME_MED); //.toFormat('dd/MM/yyyy \'às\' HH\'h\'mm');
 
     return <Card className="w-full border border-black overflow-hidden xarta-card">
         <CardHeader className="text-center xarta-card-styles">

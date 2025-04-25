@@ -2,6 +2,7 @@ import { EmbeddedClient } from "./EmbeddedClient";
 import { GhostPost } from "@/components/types/GhostPost";
 import { RetryFetchPostEmbed } from "@/components/Xarta/RetryFetchPostEmbed";
 import { INTERNAL_NEXT_API_BASE_URL, PUBLIC_NEXT_API_BASE_URL } from "@/config/config";
+import { getLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 
 export default async function EmbeddedPage({ params }: { params: { id: string } }) {
@@ -45,8 +46,10 @@ export default async function EmbeddedPage({ params }: { params: { id: string } 
 
     const codeInjectionData = await resCodeInjection.json();
 
+    const locale = await getLocale();
+
     return (
-        post ? <EmbeddedClient post={post} postId={params.id} settings={settingsData} globalCodeInjection={codeInjectionData} /> : 
+        post ? <EmbeddedClient locale={locale} post={post} postId={params.id} settings={settingsData} globalCodeInjection={codeInjectionData} /> : 
         <RetryFetchPostEmbed postId={params.id} settings={settingsData} globalCodeInjection={codeInjectionData}  />
     );
 }
