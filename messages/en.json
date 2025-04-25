@@ -40,7 +40,7 @@
         "PUBLISHED_OPTION": "Published",
         "LETS_CREATE_A_XARTA_TEXT": "Let's create a Xarta!",
         "HELLO_TEXT": "Hello",
-        "DEMO_MODE_ENABLED_TEXT": "This version of Xarta is for demonstration purposes only to showcase its functionality and dynamics. Click on &quot;Edit&quot; to see the editing screen or click anywhere else on the cards below to view the published version.",
+        "DEMO_MODE_ENABLED_TEXT": "This version of Xarta is for demonstration purposes only to showcase its functionality and dynamics. Click on Edit to see the editing screen or click anywhere else on the cards below to view the published version.",
         "ASSOCIATED_TO_ORG_TEXT": "You are associated with the organization",
         "CREATED_CONTEXTS_TEXT": "Created Contexts",
         "CARD_COUNT_SUMMARY": "You have <b>{postsCount} cards</b> ({draftPostsCount} in draft, {publishedPostsCount} published, with {publiclyAvailableCount} publicly available)",
