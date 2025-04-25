@@ -26,18 +26,22 @@ A dynamic card manager built on top of Ghost CMS.
     PUBLIC_URL=http://localhost:3009
     ```
 
-- Call the `./prod/setup.sh` script and follow its instructions:
+**Important:** Please change directories in the commands below to ensure that the scripts will behave properly.
+
+- Call the `setup.sh` script and follow its instructions:
 
     ```bash
-    . ./prod/setup.sh
+    cd ./prod
+    . ./setup.sh
     ```
 
-- Update the `.env` file as requested.
+- Update the `.env` file in the project root as requested by the script.
 
 - Start the server by calling the `up.sh` script: 
 
     ```bash
-    . ./prod/up.sh
+    cd ./prod
+    . ./up.sh
     ```
 
 - Access `http://localhost:3009/xarta`
@@ -45,15 +49,16 @@ A dynamic card manager built on top of Ghost CMS.
 - Call `down.sh` script when you wish to stop and remove Xarta containers, but persist the state:
 
     ```bash
-    . ./prod/down.sh
+    cd ./prod
+    . ./down.sh
     ```
 
 - **⚠️ Dangerous:** Call `reset.sh` script if you want to completely remove all data for the Xarta project:
 
     ```bash
-    . ./prod/reset.sh
+    cd ./prod
+    . ./reset.sh
     ```
-
 
 ## Xarta Customization
 
