@@ -6,7 +6,7 @@ import { GhostPost } from "../types/GhostPost";
 import { useTranslations } from "next-intl";
 
 
-export const RetryFetchPostEmbed = ({ postId, settings, globalCodeInjection }: CommonEmbedProps) => {
+export const RetryFetchPostEmbed = ({ postId, settings, globalCodeInjection, locale }: CommonEmbedProps & {locale: string}) => {
 
     const t = useTranslations('strings');
 
@@ -27,5 +27,5 @@ export const RetryFetchPostEmbed = ({ postId, settings, globalCodeInjection }: C
 
     }, [postId]);
 
-    return <>{post ? <EmbeddedClient post={post} postId={postId} settings={settings} globalCodeInjection={globalCodeInjection} /> : t('LOADING_DRAFT_TEXT')}</>;
+    return <>{post ? <EmbeddedClient post={post} postId={postId} settings={settings} globalCodeInjection={globalCodeInjection} locale={locale} /> : t('LOADING_DRAFT_TEXT')}</>;
 };

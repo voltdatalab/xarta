@@ -50,6 +50,6 @@ export default async function EmbeddedPage({ params }: { params: { id: string } 
 
     return (
         post ? <EmbeddedClient locale={locale} post={post} postId={params.id} settings={settingsData} globalCodeInjection={codeInjectionData} /> : 
-        <RetryFetchPostEmbed postId={params.id} settings={settingsData} globalCodeInjection={codeInjectionData}  />
+        <RetryFetchPostEmbed locale={locale} postId={params.id} settings={settingsData} globalCodeInjection={codeInjectionData}  />
     );
 }
