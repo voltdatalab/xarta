@@ -1,10 +1,10 @@
 import { Carregando } from "@/components/Xarta/Home/Carregando";
-import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 
 
-export default function LoadingHome() {
+export default async function LoadingHome() {
 
-    const t = useTranslations('strings');
+    const t = await getTranslations('strings');
 
     return <Carregando>
         {t('LOADING_XARTA')}
