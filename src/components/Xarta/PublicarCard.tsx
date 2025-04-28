@@ -2,12 +2,11 @@ import { useRouter } from "next/navigation";
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { HOME } from "@/config/config";
 import { GhostPost } from "@/components/types/GhostPost";
-import { PUBLIC_NEXT_API_BASE_URL } from "@/config/config";
 import { SendIcon } from "./Icons/SendIcon";
 import { TrashIcon } from "./Icons/TrashIcon";
 import { EditarCardProps } from "../functional/EditarCard/EditarCardProps";
 import { cn } from "@/lib/utils";
-import { NotepadTextDashed, Save, SquarePen } from 'lucide-react'
+import { Save, SquarePen } from 'lucide-react'
 import { buttonTransitionStyles } from "./Home/RoundedFullButton";
 import { Dispatch, SetStateAction } from "react";
 import { ActionType } from "../functional/EditarCard/EditarCard";
@@ -16,10 +15,15 @@ import { updatePost } from '../ghost-api/updatePost';
 import { createPost } from '../ghost-api/createPost';
 import { useToast } from "../ui/use-toast";
 import { useTranslations } from "next-intl";
+import { ConfigPublicRootUrl } from "../ghost-api/admin/fetchPost";
 
 
 
-export default function PublicarCard({ id, checked, onChange, post, mode, currentAction, setCurrentAction }: { id?: GhostPost["id"], mode: EditarCardProps["mode"], currentAction?: ActionType, setCurrentAction?: Dispatch<SetStateAction<ActionType>>, checked: boolean, onChange?: (v: boolean) => void, post: EditarCardProps["post"] }) {
+export default function PublicarCard(
+    { id, checked, onChange, post, mode, currentAction, setCurrentAction, config }: 
+    { id?: GhostPost["id"], mode: EditarCardProps["mode"], currentAction?: ActionType, 
+        setCurrentAction?: Dispatch<SetStateAction<ActionType>>, checked: boolean, 
+        onChange?: (v: boolean) => void, post: EditarCardProps["post"], config: ConfigPublicRootUrl }) {
     const t = useTranslations('strings');
     
     const router = useRouter();
@@ -29,7 +33,7 @@ export default function PublicarCard({ id, checked, onChange, post, mode, curren
     const deletePostMutation = useMutation({
         mutationFn: async () => {
             setCurrentAction?.('erase');
-            await deletePost(post.id);
+            await deletePost(post.id, {config});
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['post', id] }); // Assuming 'posts' is the query key for fetching posts
@@ -51,7 +55,7 @@ export default function PublicarCard({ id, checked, onChange, post, mode, curren
             const response = await updatePost({
                 ...post,
                 status: status ?? post.status ?? 'published', // Assuming you want to update the post to 'published'
-            });
+            }, {config});
             return response;
         },
         onSuccess: () => {
@@ -81,6 +85,7 @@ export default function PublicarCard({ id, checked, onChange, post, mode, curren
                         ...post,
                         status: status ?? post.status ?? 'published', // Assuming you want to update the post to 'published'
                     },
+                    {config}
                 );
 
                 // Handle response if it's successful
@@ -120,6 +125,7 @@ export default function PublicarCard({ id, checked, onChange, post, mode, curren
                     ...post,
                     status: 'draft', // Force post back to draft to unpublish it
                 },
+                {config}
             );
 
             return response;

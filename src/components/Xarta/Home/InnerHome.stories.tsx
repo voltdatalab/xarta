@@ -31,5 +31,8 @@ export const PostExample: Story = {
         setTitleParam: () => { },
         setStatusParam: () => { },
         setSelectedTags: () => { },
+        config: {
+            PUBLIC_GHOST_TAGS_PANEL_URL: ''
+        }
     }
 }

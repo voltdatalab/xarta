@@ -7,9 +7,14 @@ import { getPosts } from "@/components/ghost-api/getPosts";
 import { useState } from "react";
 import { useTags } from "../WrapEditarCard";
 import { GhostTag } from "@/components/types/GhostTag";
+import { XartaConfig } from "@/config/XartaConfig";
+import { ConfigGhostApiTagsUrl } from "@/components/ghost-api/admin/fetchTags";
+import { ConfigGhostAuth } from "@/components/ghost-auth/axios";
+import { ConfigPublicRootUrl } from "@/components/ghost-api/admin/fetchPost";
 
 // Main component that fetches the posts
-export function Home() {
+export function Home({config}: {
+  config: Pick<XartaConfig, "PUBLIC_GHOST_TAGS_PANEL_URL"> & ConfigGhostApiTagsUrl & ConfigGhostAuth & ConfigPublicRootUrl}) {
   // Use TanStack Query to fetch data
   const [titleParam, setTitleParam] = useState('');
   const [statusParam, setStatusParam] = useState('');
@@ -38,12 +43,12 @@ export function Home() {
   }>({
     queryKey: ['posts', { params }],
     queryFn: async () => {
-      const response = await getPosts(params);
+      const response = await getPosts(params, {config});
       return response;
     }
   });
 
-  const { data: tagsData } = useTags();
+  const { data: tagsData } = useTags({config});
 
   const posts = data?.posts ?? [];
 
@@ -61,7 +66,8 @@ export function Home() {
           setSelectedTags(e);
         }} 
         setTitleParam={setTitleParam}
-        setStatusParam={setStatusParam} />
+        setStatusParam={setStatusParam} 
+        config={config} />
     </div>
   );
 }

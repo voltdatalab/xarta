@@ -24,6 +24,10 @@ export const EmptyValues: Story = {
     args: {
         post: postsExample[0],
         tags: tagsExample,
-        mode: 'edit'
+        mode: 'edit',
+        config: {
+            PUBLIC_GHOST_TAGS_PANEL_URL: '',
+            PUBLIC_ROOT_URL: ''
+        }
     }
 }

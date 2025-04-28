@@ -2,13 +2,17 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { EditarCardProps } from "../functional/EditarCard/EditarCardProps";
-import { fetchTags } from '../ghost-api/admin/fetchTags';
+import { ConfigGhostApiTagsUrl, fetchTags } from '../ghost-api/admin/fetchTags';
 import { PostEditorContainer } from "../functional/EditarCard/PostEditorContainer";
 import { useTranslations } from "next-intl";
+import { XartaConfig } from "@/config/XartaConfig";
+import { ConfigPublicRootUrl } from "../ghost-api/admin/fetchPost";
 
+export type ConfigPublicGhostTagsPanelUrl = Pick<XartaConfig, "PUBLIC_GHOST_TAGS_PANEL_URL">;
 
-
-export function WrapCreateCard() {
+export function WrapCreateCard({ config }: {
+    config: ConfigGhostApiTagsUrl & ConfigPublicGhostTagsPanelUrl & ConfigPublicRootUrl;
+}) {
 
     const t = useTranslations('strings');
 
@@ -27,11 +31,11 @@ export function WrapCreateCard() {
 
     const { data: tagsData, error: tagsError, isLoading: tagsLoading } = useQuery({
         queryKey: ['tags'],
-        queryFn: fetchTags, // Query function to fetch tags
+        queryFn: () => fetchTags({config}), // Query function to fetch tags
     });
 
     if (tagsError) return <div>{t('ERROR_FETCHING_TAGS')}: {tagsError.message}</div>;
     if (!tagsData || !tagsData.tags.length) return <div>{/*No tags data available*/}</div>;
 
-    return <PostEditorContainer mode="create" post={post} tags={tagsData.tags} />;
+    return <PostEditorContainer config={config} mode="create" post={post} tags={tagsData.tags} />;
 }

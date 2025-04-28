@@ -1,9 +1,11 @@
 "use client";
-import { ghostApiTagsUrl } from "../../Xarta/WrapEditarCard";
 
+import { XartaConfig } from "@/config/XartaConfig";
 
-export async function fetchTags() {
-    const response = await fetch(ghostApiTagsUrl, {
+export type ConfigGhostApiTagsUrl = Pick<XartaConfig, "ghostApiTagsUrl">;
+
+export async function fetchTags({config}: {config: ConfigGhostApiTagsUrl}) {
+    const response = await fetch(config.ghostApiTagsUrl, {
         headers: {
             'Content-Type': 'application/json',
         },

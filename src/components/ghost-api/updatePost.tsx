@@ -1,8 +1,8 @@
-import { ROOT_URL } from "@/config/config";
 import { EditarCardProps } from "../functional/EditarCard/EditarCardProps";
+import { ConfigPublicRootUrl } from "./admin/fetchPost";
 
 
-export async function updatePost(post: EditarCardProps["post"] & { lexical?: any; }) {
+export async function updatePost(post: EditarCardProps["post"] & { lexical?: any; }, {config}: {config: ConfigPublicRootUrl}) {
   // Validate the required fields
   if (!(post.id) || !(post.title) || !(post.html)) {
     throw new Error('ID, Title, and HTML content are required');
@@ -16,7 +16,7 @@ export async function updatePost(post: EditarCardProps["post"] & { lexical?: any
   delete post.lexical;
 
   // Prepare the request to Ghost's Admin API
-  const ghostApiUrl = `${ROOT_URL}/ghost/api/admin/posts/${post.id}/?source=html`;
+  const ghostApiUrl = `${config.PUBLIC_ROOT_URL}/ghost/api/admin/posts/${post.id}/?source=html`;
 
   const ghostResponse = await fetch(ghostApiUrl, {
     method: 'PUT',

@@ -1,12 +1,14 @@
 "use client";
 import { CommonEmbedProps, EmbeddedClient } from "@/app/embed/[id]/EmbeddedClient";
 import { useState, useEffect } from "react";
-import { fetchPost } from "../ghost-api/admin/fetchPost";
+import { ConfigPublicRootUrl, fetchPost } from "../ghost-api/admin/fetchPost";
 import { GhostPost } from "../types/GhostPost";
 import { useTranslations } from "next-intl";
 
 
-export const RetryFetchPostEmbed = ({ postId, settings, globalCodeInjection, locale }: CommonEmbedProps & {locale: string}) => {
+export const RetryFetchPostEmbed = (
+    { postId, settings, globalCodeInjection, locale, config }: 
+    CommonEmbedProps & {locale: string} & {config: ConfigPublicRootUrl}) => {
 
     const t = useTranslations('strings');
 
@@ -18,7 +20,7 @@ export const RetryFetchPostEmbed = ({ postId, settings, globalCodeInjection, loc
 
         console.log('postId', postId);
 
-        fetchPost(postId).then(postResponse => {
+        fetchPost(postId, config).then(postResponse => {
             const post = postResponse.posts[0];
             if (post) {
                 setPost(post);
@@ -27,5 +29,5 @@ export const RetryFetchPostEmbed = ({ postId, settings, globalCodeInjection, loc
 
     }, [postId]);
 
-    return <>{post ? <EmbeddedClient post={post} postId={postId} settings={settings} globalCodeInjection={globalCodeInjection} locale={locale} /> : t('LOADING_DRAFT_TEXT')}</>;
+    return <>{post ? <EmbeddedClient config={config} post={post} postId={postId} settings={settings} globalCodeInjection={globalCodeInjection} locale={locale} /> : t('LOADING_DRAFT_TEXT')}</>;
 };

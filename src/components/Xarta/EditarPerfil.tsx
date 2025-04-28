@@ -1,14 +1,19 @@
+"use client";
+
 import { useRouter } from "next/navigation";
 import { TituloPagina } from "./TituloPagina";
-import { CONFIGURACOES, HOME, PUBLIC_GHOST_ADMIN_API_URL } from "@/config/config";
+import { CONFIGURACOES, HOME } from "@/config/config";
 import { mainFlexContainer } from "./Home/mainFlexContainer";
 import { cn } from "@/lib/utils";
 import { useCallback, useEffect, useState } from "react";
 import { buttonTransitionStyles } from "./Home/RoundedFullButton";
 import { useTranslations } from "next-intl";
+import { XartaConfig } from "@/config/XartaConfig";
 
 export type ScreenType = 'edit' | 'create' | 'login';
 
+
+export type ConfigPublicGhostAdminApiUrl = Pick<XartaConfig, "PUBLIC_GHOST_ADMIN_API_URL">;
 
 // TODO: improve types
 export const getButtonText = (type: ScreenType, t: any) => {
@@ -22,7 +27,7 @@ export const getButtonText = (type: ScreenType, t: any) => {
   }
 }
 
-export default function EditarPerfil({ type = 'edit' }: { type?: ScreenType }) {
+export default function EditarPerfil({ type = 'edit', config }: { type?: ScreenType, config: ConfigPublicGhostAdminApiUrl }) {
 
   const t = useTranslations('strings');
 
@@ -38,7 +43,7 @@ export default function EditarPerfil({ type = 'edit' }: { type?: ScreenType }) {
       router.push(type === 'edit' ? CONFIGURACOES : HOME);
     } else if (type === 'login') {
       setCanClick(false);
-      fetch(`${PUBLIC_GHOST_ADMIN_API_URL}session`, {
+      fetch(`${config.PUBLIC_GHOST_ADMIN_API_URL}session`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -1,5 +1,5 @@
 import { getRequestConfig } from 'next-intl/server';
-import { INTERNAL_NEXT_API_BASE_URL, PUBLIC_NEXT_API_BASE_URL } from '@/config/config';
+import { INTERNAL_NEXT_API_BASE_URL } from '@/config/config';
 
 export default getRequestConfig(async () => {
 

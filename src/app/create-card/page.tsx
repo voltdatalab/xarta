@@ -2,13 +2,16 @@ import { SharedDefaults } from '@/components/SharedDefaults';
 import { Footer } from '@/components/Xarta/Footer';
 import { Header } from '@/components/Xarta/Header';
 import { WrapCreateCard } from '@/components/Xarta/WrapCreateCard';
+import { getXartaConfig } from '@/config/getConfig';
 
-export default function CreateCardPage() {
+export default async function CreateCardPage() {
+
+  const config = await getXartaConfig();
 
   return (
-    <SharedDefaults>
+    <SharedDefaults config={config}>
       <Header></Header>
-      <WrapCreateCard />
+      <WrapCreateCard config={config} />
       <Footer/>
     </SharedDefaults>
 

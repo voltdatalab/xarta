@@ -2,14 +2,14 @@
 
 import { ReactNode, useEffect, useState } from "react";
 import { GhostPost } from "../types/GhostPost";
-import { VisualizarCardInner } from "./VisualizarCard";
-import { fetchPost } from "../ghost-api/admin/fetchPost";
+import { ConfigXartaDomain, VisualizarCardInner } from "./VisualizarCard";
+import { ConfigPublicRootUrl, fetchPost } from "../ghost-api/admin/fetchPost";
 import { ChildrenProps } from "@/lib/utils";
 import { useTranslations } from "next-intl";
 
 
 
-export const RetryFetchPostPage = ({ id }: { id: GhostPost["id"]}) => {
+export const RetryFetchPostPage = ({ id, config }: { id: GhostPost["id"], config: ConfigPublicRootUrl & ConfigXartaDomain}) => {
 
     const t = useTranslations('strings');
 
@@ -19,9 +19,9 @@ export const RetryFetchPostPage = ({ id }: { id: GhostPost["id"]}) => {
     useEffect(() => {
         if (!id) return;
 
-        fetchPost(id).then(post => setPost(post));
+        fetchPost(id, config).then(post => setPost(post));
 
     }, [id]);
 
-    return <>{ post ? <VisualizarCardInner postId={id} postStatus={"draft"} post={post} /> : t('LOADING_DRAFT_TEXT') }</>;
+    return <>{ post ? <VisualizarCardInner config={config} postId={id} postStatus={"draft"} post={post} /> : t('LOADING_DRAFT_TEXT') }</>;
 };

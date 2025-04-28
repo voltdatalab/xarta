@@ -6,18 +6,24 @@ import { ConfiguracoesTitulo } from "./ConfiguracoesTitulo";
 import { mainFlexContainer } from "./Home/mainFlexContainer";
 import { FormEvent, useEffect, useState } from "react";
 import { useGhostUser } from "../functional/GhostUserProvider";
-import { NEXT_XARTA_BASE_URL, PUBLIC_NEXT_API_BASE_URL, PUBLIC_NEXT_XARTA_API_WITH_GHOST_BASE, ROOT_URL } from "@/config/config";
 import { useToast } from "../ui/use-toast";
 import { cn } from "@/lib/utils";
 import { Toaster } from "../ui/toaster";
 import { useRouter } from "next/navigation";
 import { buttonTransitionStyles } from "./Home/RoundedFullButton";
 import { LogOut } from "lucide-react";
-import { JWT_TOKEN_KEY } from "../ghost-auth/constants";
 import { useTranslations } from "next-intl";
 import { LanguageSelector, Language } from "../functional/LanguageSelector";
+import { XartaConfig } from "@/config/XartaConfig";
 
-export function Configuracoes() {
+export function Configuracoes({config}: 
+  {config: Pick<XartaConfig, 
+    "PUBLIC_NEXT_XARTA_API_WITH_GHOST_BASE" |
+    "PUBLIC_NEXT_API_BASE_URL" | 
+    "PUBLIC_ROOT_URL" |
+    "JWT_TOKEN_KEY" |
+    "NEXT_XARTA_BASE_URL"
+  > }) {
 
   const t = useTranslations('strings');
 
@@ -45,7 +51,7 @@ export function Configuracoes() {
       setLoadingLanguages(true);
       try {
         // Fetch available languages from API
-        const languagesRes = await fetch(`${PUBLIC_NEXT_XARTA_API_WITH_GHOST_BASE}/config/languages`);
+        const languagesRes = await fetch(`${config.PUBLIC_NEXT_XARTA_API_WITH_GHOST_BASE}/config/languages`);
         let availableLanguages: Language[] = [];
         
         if (languagesRes.ok) {
@@ -57,7 +63,7 @@ export function Configuracoes() {
         
         // Fetch selected language from API
         // TODO: Parallelize requests
-        const selectedLangRes = await fetch(`${PUBLIC_NEXT_API_BASE_URL}/config/selected-language`);
+        const selectedLangRes = await fetch(`${config.PUBLIC_NEXT_API_BASE_URL}/config/selected-language`);
         if (selectedLangRes.ok) {
           const data = await selectedLangRes.json();
           const language = availableLanguages.find(lang => lang.code === data.code);
@@ -92,7 +98,7 @@ export function Configuracoes() {
   useEffect(() => {
     async function fetchCodeInjectionSettings() {
       try {
-        const res = await fetch(`${PUBLIC_NEXT_API_BASE_URL}/code-injection`);
+        const res = await fetch(`${config.PUBLIC_NEXT_API_BASE_URL}/code-injection`);
         const data = await res.json();
         setCodeInjectionHead(data.codeinjection_head || "");
         setCodeInjectionFoot(data.codeinjection_foot || "");
@@ -110,7 +116,7 @@ export function Configuracoes() {
 
     try {
       // Save code injection settings
-      const codeInjectionRes = await fetch(`${ROOT_URL}/ghost/api/admin/settings`, {
+      const codeInjectionRes = await fetch(`${config.PUBLIC_ROOT_URL}/ghost/api/admin/settings`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -132,7 +138,7 @@ export function Configuracoes() {
       // Save selected language to the database
       if (selectedLanguage) {
         try {
-          await fetch(`${PUBLIC_NEXT_XARTA_API_WITH_GHOST_BASE}/config/selected-language`, { 
+          await fetch(`${config.PUBLIC_NEXT_XARTA_API_WITH_GHOST_BASE}/config/selected-language`, { 
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',
@@ -184,12 +190,12 @@ export function Configuracoes() {
           <div className="">
             <button onClick={() => {
               if (confirm(t('CONFIRM_SIGNOUT_TEXT'))) {
-                (localStorage ?? {}).removeItem?.(JWT_TOKEN_KEY);
-                fetch(`${ROOT_URL}/ghost/api/admin/session`, {
+                (localStorage ?? {}).removeItem?.(config.JWT_TOKEN_KEY);
+                fetch(`${config.PUBLIC_ROOT_URL}/ghost/api/admin/session`, {
                   method: 'DELETE'
                 }).then(() => {
                   alert(t('SIGNED_OUT_SUCCESSFULLY'));
-                  router.push(`${NEXT_XARTA_BASE_URL}`);
+                  router.push(`${config.NEXT_XARTA_BASE_URL}`);
                 })
               }
             }} className="w-full p-5 text-[#4F4F4F] hover:text-[#4B31DD] hover:bg-[#4B31DD1A] hover:font-semibold hover:text-medium flex flow-row gap-3">
