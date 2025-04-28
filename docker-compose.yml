@@ -22,13 +22,6 @@ services:
     container_name: ${PROJECT_NAME}-next
     build: 
       dockerfile: ./Dockerfile.next
-    command: >
-      bash -c '
-        cd /app &&
-        . ./tools/database/wait-for-postgres.sh && \
-        . ./tools/database/migrate.sh && \
-        node server.js
-      '
     environment:
       # TODO: Verify all env vars have been added
       # Required for get-settings

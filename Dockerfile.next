@@ -57,11 +57,16 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 # Required for running migrations
 COPY ./tools/database ./tools/database
 COPY ./tools/scripts ./tools/scripts
+RUN chmod +x ./tools/database/wait-for-postgres.sh ./tools/database/migrate.sh
 USER nextjs
 EXPOSE 3000
 ENV PORT 3000
 # set hostname to localhost
 ENV HOSTNAME "0.0.0.0"
+# Run scripts then start the server
 # server.js is created by next build from the standalone output
 # https://nextjs.org/docs/pages/api-reference/next-config-js/output
-CMD ["node", "server.js"]
+CMD bash -c " \
+  ./tools/database/wait-for-postgres.sh && \
+  ./tools/database/migrate.sh && \
+  node server.js"
