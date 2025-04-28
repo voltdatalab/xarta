@@ -33,3 +33,5 @@ next-env.d.ts
 *.tsbuildinfo
 
 storybook-static/
+
+docker-compose.yml
