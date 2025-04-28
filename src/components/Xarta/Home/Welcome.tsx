@@ -2,14 +2,17 @@ import { youngSerif } from "@/fonts"
 import { cn } from "@/lib/utils"
 import { RoundedFullButton } from "./RoundedFullButton"
 import { useTranslations } from "next-intl";
+import { ConfigPublicDemoPassword, ConfigPublicDemoUsername } from "../EditarPerfil";
 
-export const Welcome = ({ name, org, onNewCard }: { name?: string, org?: string, onNewCard?: () => void }) => {
+export const Welcome = (
+    { name, org, onNewCard, config }: 
+    { name?: string, org?: string, onNewCard?: () => void, config: ConfigPublicDemoUsername & ConfigPublicDemoPassword }) => {
     
     const t = useTranslations('strings');
     
     return <div className="flex flex-col text-center">
         <span className={cn('font-semibold text-2xl tablet:text-[38px] leading-7 tablet:leading-[46px]', youngSerif.className)}>
-            {process.env.NEXT_PUBLIC_DEMO_USERNAME ? <>
+            {config.PUBLIC_DEMO_USERNAME ? <>
                 {t('LETS_CREATE_A_XARTA_TEXT')}
             </> :
                 <>
@@ -18,7 +21,7 @@ export const Welcome = ({ name, org, onNewCard }: { name?: string, org?: string,
             }
         </span>
         <span className="mt-2.5 text-base leading-[22px] tablet:text-lg max-w-[700px] mx-auto">
-            {process.env.NEXT_PUBLIC_DEMO_PASSWORD ? <>
+            {config.PUBLIC_DEMO_PASSWORD ? <>
                 {t('DEMO_MODE_ENABLED_TEXT')}
             </> : (org ? `${t('ASSOCIATED_TO_ORG_TEXT')} ${org}` : null)
             }

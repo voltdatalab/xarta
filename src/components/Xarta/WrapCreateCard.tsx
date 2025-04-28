@@ -7,11 +7,12 @@ import { PostEditorContainer } from "../functional/EditarCard/PostEditorContaine
 import { useTranslations } from "next-intl";
 import { XartaConfig } from "@/config/XartaConfig";
 import { ConfigPublicRootUrl } from "../ghost-api/admin/fetchPost";
+import { ConfigPublicDemoUsername } from "./EditarPerfil";
 
 export type ConfigPublicGhostTagsPanelUrl = Pick<XartaConfig, "PUBLIC_GHOST_TAGS_PANEL_URL">;
 
 export function WrapCreateCard({ config }: {
-    config: ConfigGhostApiTagsUrl & ConfigPublicGhostTagsPanelUrl & ConfigPublicRootUrl;
+    config: ConfigGhostApiTagsUrl & ConfigPublicGhostTagsPanelUrl & ConfigPublicRootUrl & ConfigPublicDemoUsername;
 }) {
 
     const t = useTranslations('strings');

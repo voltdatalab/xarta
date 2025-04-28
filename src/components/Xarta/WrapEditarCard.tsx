@@ -7,6 +7,7 @@ import { ConfigPublicRootUrl, fetchPost } from '../ghost-api/admin/fetchPost';
 import { ConfigGhostApiTagsUrl, fetchTags } from '../ghost-api/admin/fetchTags';
 import { useTranslations } from 'next-intl';
 import { XartaConfig } from "@/config/XartaConfig";
+import { ConfigPublicDemoUsername } from './EditarPerfil';
 
 
 export const useTags = ({config}: {config: ConfigGhostApiTagsUrl}) => useQuery({
@@ -14,7 +15,9 @@ export const useTags = ({config}: {config: ConfigGhostApiTagsUrl}) => useQuery({
     queryFn: () => fetchTags({config}), // Query function to fetch tags
 });
 
-export default function WrapEditarCard({ id, config }: { id: string; } & {config: Pick<XartaConfig, "PUBLIC_GHOST_TAGS_PANEL_URL"> & ConfigPublicRootUrl & ConfigGhostApiTagsUrl}) {
+export default function WrapEditarCard(
+    { id, config }: { id: string; } & 
+    {config: Pick<XartaConfig, "PUBLIC_GHOST_TAGS_PANEL_URL"> & ConfigPublicRootUrl & ConfigGhostApiTagsUrl & ConfigPublicDemoUsername}) {
 
     const t = useTranslations('strings');
 

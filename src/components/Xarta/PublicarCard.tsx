@@ -16,6 +16,7 @@ import { createPost } from '../ghost-api/createPost';
 import { useToast } from "../ui/use-toast";
 import { useTranslations } from "next-intl";
 import { ConfigPublicRootUrl } from "../ghost-api/admin/fetchPost";
+import { ConfigPublicDemoUsername } from "./EditarPerfil";
 
 
 
@@ -23,7 +24,7 @@ export default function PublicarCard(
     { id, checked, onChange, post, mode, currentAction, setCurrentAction, config }: 
     { id?: GhostPost["id"], mode: EditarCardProps["mode"], currentAction?: ActionType, 
         setCurrentAction?: Dispatch<SetStateAction<ActionType>>, checked: boolean, 
-        onChange?: (v: boolean) => void, post: EditarCardProps["post"], config: ConfigPublicRootUrl }) {
+        onChange?: (v: boolean) => void, post: EditarCardProps["post"], config: ConfigPublicRootUrl & ConfigPublicDemoUsername }) {
     const t = useTranslations('strings');
     
     const router = useRouter();
@@ -225,7 +226,7 @@ export default function PublicarCard(
                 </button>
             </div>
 
-            { process.env.NEXT_PUBLIC_DEMO_USERNAME ? <div className="mt-3 font-bold">
+            { config.PUBLIC_DEMO_USERNAME ? <div className="mt-3 font-bold">
                     {t('DEMO_MODE_WARNING_TEXT')}
                 </div> : null }
 

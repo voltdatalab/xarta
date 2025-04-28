@@ -16,6 +16,7 @@ import { GhostTag } from "@/components/types/GhostTag";
 import { Dispatch, SetStateAction, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import { XartaConfig } from "@/config/XartaConfig";
+import { ConfigPublicDemoPassword, ConfigPublicDemoUsername } from "../EditarPerfil";
 
 export function InnerHome({
   posts = [],
@@ -38,7 +39,7 @@ export function InnerHome({
   setTitleParam: Dispatch<SetStateAction<string>>,
   setStatusParam: Dispatch<SetStateAction<string>>,
   setSelectedTags: (tags: GhostTag[]) => void,
-  config: Pick<XartaConfig, "PUBLIC_GHOST_TAGS_PANEL_URL">
+  config: Pick<XartaConfig, "PUBLIC_GHOST_TAGS_PANEL_URL"> & ConfigPublicDemoUsername & ConfigPublicDemoPassword
 }) {
 
   const t = useTranslations('strings');
@@ -72,7 +73,7 @@ export function InnerHome({
 
   return (
     <div className={mainFlexContainer}>
-      <Welcome onNewCard={createCard} name={userName} org={organization} />
+      <Welcome config={config} onNewCard={createCard} name={userName} org={organization} />
       <YourCards posts={posts} className="pt-9 pb-5" />
 
       <div className="flex flex-row gap-[18px] pb-6 flex-wrap justify-items-center">

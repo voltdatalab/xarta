@@ -16,6 +16,7 @@ import { GhostTag } from "@/components/types/GhostTag";
 import { useTranslations } from "next-intl";
 import { XartaConfig } from "@/config/XartaConfig";
 import { ConfigPublicRootUrl } from "@/components/ghost-api/admin/fetchPost";
+import { ConfigPublicDemoUsername } from "@/components/Xarta/EditarPerfil";
 
 
 export type SetFeatured = {
@@ -39,7 +40,7 @@ export function EditarCard({
     setCodeInjectionHead,
     setCodeInjectionFoot,
     config
-}: EditarCardProps & SetFeatured & {config: Pick<XartaConfig, "PUBLIC_GHOST_TAGS_PANEL_URL"> & ConfigPublicRootUrl}) {
+}: EditarCardProps & SetFeatured & {config: Pick<XartaConfig, "PUBLIC_GHOST_TAGS_PANEL_URL"> & ConfigPublicRootUrl & ConfigPublicDemoUsername }) {
 
     const t = useTranslations('strings');
 

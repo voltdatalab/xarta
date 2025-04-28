@@ -32,7 +32,9 @@ export const PostExample: Story = {
         setStatusParam: () => { },
         setSelectedTags: () => { },
         config: {
-            PUBLIC_GHOST_TAGS_PANEL_URL: ''
+            PUBLIC_GHOST_TAGS_PANEL_URL: '',
+            PUBLIC_DEMO_USERNAME: '',
+            PUBLIC_DEMO_PASSWORD: ''
         }
     }
 }

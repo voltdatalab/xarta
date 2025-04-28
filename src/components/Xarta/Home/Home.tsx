@@ -11,10 +11,11 @@ import { XartaConfig } from "@/config/XartaConfig";
 import { ConfigGhostApiTagsUrl } from "@/components/ghost-api/admin/fetchTags";
 import { ConfigGhostAuth } from "@/components/ghost-auth/axios";
 import { ConfigPublicRootUrl } from "@/components/ghost-api/admin/fetchPost";
+import { ConfigPublicDemoPassword, ConfigPublicDemoUsername } from "../EditarPerfil";
 
 // Main component that fetches the posts
 export function Home({config}: {
-  config: Pick<XartaConfig, "PUBLIC_GHOST_TAGS_PANEL_URL"> & ConfigGhostApiTagsUrl & ConfigGhostAuth & ConfigPublicRootUrl}) {
+  config: Pick<XartaConfig, "PUBLIC_GHOST_TAGS_PANEL_URL"> & ConfigGhostApiTagsUrl & ConfigGhostAuth & ConfigPublicRootUrl & ConfigPublicDemoUsername & ConfigPublicDemoPassword}) {
   // Use TanStack Query to fetch data
   const [titleParam, setTitleParam] = useState('');
   const [statusParam, setStatusParam] = useState('');

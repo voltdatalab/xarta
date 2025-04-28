@@ -7,6 +7,8 @@ export const getXartaConfig = async () => {
 
     // Attempt to use dynamic
     const PUBLIC_ROOT_URL = process.env.PUBLIC_ROOT_URL ?? process.env.STORYBOOK_ROOT_URL;
+    const PUBLIC_DEMO_USERNAME = process.env.PUBLIC_DEMO_USERNAME;
+    const PUBLIC_DEMO_PASSWORD = process.env.PUBLIC_DEMO_PASSWORD;
 
     console.log('PUBLIC_ROOT_URL:', PUBLIC_ROOT_URL);
     
@@ -27,6 +29,8 @@ export const getXartaConfig = async () => {
 
     return {
         PUBLIC_ROOT_URL: PUBLIC_ROOT_URL,
+        PUBLIC_DEMO_USERNAME: PUBLIC_DEMO_USERNAME,
+        PUBLIC_DEMO_PASSWORD: PUBLIC_DEMO_PASSWORD,
         PUBLIC_GHOST_ADMIN_API_URL,
         PUBLIC_NEXT_XARTA_API_WITH_GHOST_BASE,
         PUBLIC_GHOST_TAGS_PANEL_URL,

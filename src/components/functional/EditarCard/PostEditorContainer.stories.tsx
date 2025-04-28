@@ -27,7 +27,8 @@ export const EmptyValues: Story = {
         mode: 'edit',
         config: {
             PUBLIC_GHOST_TAGS_PANEL_URL: '',
-            PUBLIC_ROOT_URL: ''
+            PUBLIC_ROOT_URL: '',
+            PUBLIC_DEMO_USERNAME: undefined
         }
     }
 }

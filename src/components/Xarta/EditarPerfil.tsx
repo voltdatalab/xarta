@@ -14,6 +14,8 @@ export type ScreenType = 'edit' | 'create' | 'login';
 
 
 export type ConfigPublicGhostAdminApiUrl = Pick<XartaConfig, "PUBLIC_GHOST_ADMIN_API_URL">;
+export type ConfigPublicDemoUsername = Pick<XartaConfig, "PUBLIC_DEMO_USERNAME">;
+export type ConfigPublicDemoPassword = Pick<XartaConfig, "PUBLIC_DEMO_PASSWORD">;
 
 // TODO: improve types
 export const getButtonText = (type: ScreenType, t: any) => {
@@ -27,7 +29,7 @@ export const getButtonText = (type: ScreenType, t: any) => {
   }
 }
 
-export default function EditarPerfil({ type = 'edit', config }: { type?: ScreenType, config: ConfigPublicGhostAdminApiUrl }) {
+export default function EditarPerfil({ type = 'edit', config }: { type?: ScreenType, config: ConfigPublicGhostAdminApiUrl & ConfigPublicDemoUsername & ConfigPublicDemoPassword }) {
 
   const t = useTranslations('strings');
 
@@ -73,8 +75,8 @@ export default function EditarPerfil({ type = 'edit', config }: { type?: ScreenT
   }
 
   useEffect(() => {
-    const demoUsername = process.env.NEXT_PUBLIC_DEMO_USERNAME;
-    const demoPassword = process.env.NEXT_PUBLIC_DEMO_PASSWORD;
+    const demoUsername = config.PUBLIC_DEMO_USERNAME;
+    const demoPassword = config.PUBLIC_DEMO_PASSWORD;
 
     if (demoUsername && demoPassword) {
       setEmail(demoUsername);

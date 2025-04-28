@@ -21,6 +21,7 @@ export function Configuracoes({config}:
     "PUBLIC_NEXT_XARTA_API_WITH_GHOST_BASE" |
     "PUBLIC_NEXT_API_BASE_URL" | 
     "PUBLIC_ROOT_URL" |
+    "PUBLIC_DEMO_USERNAME" |
     "JWT_TOKEN_KEY" |
     "NEXT_XARTA_BASE_URL"
   > }) {
@@ -182,7 +183,7 @@ export function Configuracoes({config}:
           </Avatar>
           <div>
             <div className="text-[18px] font-semibold">{user.name}</div>
-            { process.env.NEXT_PUBLIC_DEMO_USERNAME ? null : <div className="text-sm"><a href="/ghost/#/settings" className="hover:underline" target="_blank"> {t('MANAGE_GHOST_ACCOUNT_TEXT')} </a></div>  }
+            { config.PUBLIC_DEMO_USERNAME ? null : <div className="text-sm"><a href="/ghost/#/settings" className="hover:underline" target="_blank"> {t('MANAGE_GHOST_ACCOUNT_TEXT')} </a></div>  }
           </div>
         </Card>
 
@@ -225,7 +226,7 @@ export function Configuracoes({config}:
                 {t('CUSTOMIZE_LOGO_TEXT')}
               </label>
               <p>
-                { process.env.NEXT_PUBLIC_DEMO_USERNAME ? null : <a href="/ghost/#/settings/design/edit" className="hover:underline" target="_blank">- {t('ACCESS_GHOST_CONFIG_TEXT')}</a> }
+                { config.PUBLIC_DEMO_USERNAME ? null : <a href="/ghost/#/settings/design/edit" className="hover:underline" target="_blank">- {t('ACCESS_GHOST_CONFIG_TEXT')}</a> }
               </p>
             </div>
 

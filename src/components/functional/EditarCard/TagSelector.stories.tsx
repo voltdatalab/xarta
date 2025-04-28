@@ -22,7 +22,8 @@ export const EmptyValues: Story = {
         selectedTags: [],
         tags: [],
         config: {
-            PUBLIC_GHOST_TAGS_PANEL_URL: ''
+            PUBLIC_GHOST_TAGS_PANEL_URL: '',
+            PUBLIC_DEMO_USERNAME: undefined
         }
     }
 }
@@ -34,7 +35,8 @@ export const SomeValues: Story = {
         tags: tagsExample,
         onChange:  action('onChange'),
         config: {
-            PUBLIC_GHOST_TAGS_PANEL_URL: ''
+            PUBLIC_GHOST_TAGS_PANEL_URL: '',
+            PUBLIC_DEMO_USERNAME: undefined
         }
     }
 }
