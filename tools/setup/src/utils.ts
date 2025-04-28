@@ -59,11 +59,18 @@ export const prompt = async (question: string, defaultAnswer?: string): Promise<
 export const generateSecurePassword = (): string => {
   const length = 40;
   const charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_=+';
+  const charsetLength = charset.length;
   let password = '';
+
+  const cryptoObj = typeof window !== 'undefined' && window.crypto ? window.crypto : require('crypto').webcrypto;
+  const randomValues = new Uint32Array(length);
+  cryptoObj.getRandomValues(randomValues);
+
   for (let i = 0; i < length; i++) {
-    const randomIndex = Math.floor(Math.random() * charset.length);
+    const randomIndex = randomValues[i] % charsetLength;
     password += charset[randomIndex];
   }
+
   return password;
 };
 

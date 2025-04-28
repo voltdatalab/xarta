@@ -4,16 +4,16 @@ import { Header } from "@/components/Xarta/Header";
 import { Carregando } from "@/components/Xarta/Home/Carregando";
 import { mainFlexContainer } from "@/components/Xarta/Home/mainFlexContainer";
 import { TituloPagina } from "@/components/Xarta/TituloPagina";
+import { getXartaConfig } from "@/config/getConfig";
 import { cn } from "@/lib/utils";
-import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 
+export default async function LoadingViewCard () {
 
+    const t = await getTranslations('strings');
+    const config = await getXartaConfig();
 
-export default function LoadingViewCard () {
-
-    const t = useTranslations('strings');
-
-    return <SharedDefaults>
+    return <SharedDefaults config={config}>
         <Header></Header>
         <div className={cn("flex flex-col items-center py-4 space-y-5", mainFlexContainer)}>
             <TituloPagina title={t('VIEW_XARTA')} />

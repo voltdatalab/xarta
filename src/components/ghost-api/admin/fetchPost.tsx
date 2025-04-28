@@ -1,12 +1,14 @@
 "use client";
 
-import { ROOT_URL } from "@/config/config";
+import { XartaConfig } from "@/config/XartaConfig";
 
-export const ghostAdminPostUrl = (id: string) => `${ROOT_URL}/ghost/api/admin/posts/${id}?include=authors,tags&formats=html`
+export type ConfigPublicRootUrl = Pick<XartaConfig, "PUBLIC_ROOT_URL">;
+
+export const ghostAdminPostUrl = (id: string, config: ConfigPublicRootUrl) => `${config.PUBLIC_ROOT_URL}/ghost/api/admin/posts/${id}?include=authors,tags&formats=html`
 
 
-export async function fetchPost(id: string) {
-    const response = await fetch(ghostAdminPostUrl(id), {
+export async function fetchPost(id: string, config: ConfigPublicRootUrl) {
+    const response = await fetch(ghostAdminPostUrl(id, config), {
         headers: {
             'Content-Type': 'application/json',
         },

@@ -20,7 +20,11 @@ type Story = StoryObj<typeof meta>;
 export const EmptyValues: Story = {
     args: {
         selectedTags: [],
-        tags: []
+        tags: [],
+        config: {
+            PUBLIC_GHOST_TAGS_PANEL_URL: '',
+            PUBLIC_DEMO_USERNAME: undefined
+        }
     }
 }
 
@@ -29,6 +33,10 @@ export const SomeValues: Story = {
     args: {
         selectedTags,
         tags: tagsExample,
-        onChange:  action('onChange')
+        onChange:  action('onChange'),
+        config: {
+            PUBLIC_GHOST_TAGS_PANEL_URL: '',
+            PUBLIC_DEMO_USERNAME: undefined
+        }
     }
 }

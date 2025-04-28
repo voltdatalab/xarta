@@ -4,6 +4,7 @@ import { EmbeddedCard } from "@/components/functional/EmbeddedCard/EmbeddedCard"
 import { GhostPost } from "@/components/types/GhostPost";
 import { useEffect } from "react";
 import { Settings, CodeInjection } from "./Settings";
+import { ConfigPublicRootUrl } from "@/components/ghost-api/admin/fetchPost";
 
 export type CommonEmbedProps = {
     postId: string, 
@@ -11,7 +12,9 @@ export type CommonEmbedProps = {
     globalCodeInjection: CodeInjection
 }
 
-export function EmbeddedClient({ post, postId, settings, globalCodeInjection, locale }: { post: GhostPost; locale: string } & CommonEmbedProps) {
+export function EmbeddedClient(
+    { post, postId, settings, globalCodeInjection, locale, config }:
+    { post: GhostPost; locale: string } & CommonEmbedProps & {config: ConfigPublicRootUrl}) {
     useEffect(() => {
         const resizeObserver = new ResizeObserver((entries) => {
             for (let entry of entries) {
@@ -35,7 +38,9 @@ export function EmbeddedClient({ post, postId, settings, globalCodeInjection, lo
 
     return (
         <div id="embedded-post-container">
-            <EmbeddedCard post={post} settings={settings} globalCodeInjection={globalCodeInjection} locale={locale} />
+            <EmbeddedCard 
+                config={config}
+                post={post} settings={settings} globalCodeInjection={globalCodeInjection} locale={locale} />
         </div>
     );
 }

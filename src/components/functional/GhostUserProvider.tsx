@@ -3,12 +3,15 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { ChildrenProps } from '@/lib/utils';
-import { PUBLIC_NEXT_API_BASE_URL } from '@/config/config';
 import { fetchGhostUser } from '../ghost-auth/fetchGhostUser';
+import { XartaConfig } from "@/config/XartaConfig";
+import { ConfigPublicRootUrl } from '../ghost-api/admin/fetchPost';
 
 
-export async function fetchSettings() {
-    const response = await fetch(`${PUBLIC_NEXT_API_BASE_URL}/get-settings`);
+export async function fetchSettings(
+    {config}: 
+    {config: Pick<XartaConfig, "PUBLIC_NEXT_API_BASE_URL"> & ConfigPublicRootUrl}) {
+    const response = await fetch(`${config.PUBLIC_NEXT_API_BASE_URL}/get-settings`);
     if (!response.ok) {
         throw new Error('Failed to fetch tags');
     }
@@ -24,7 +27,9 @@ export const useGhostUser = () => {
 };
 
 // UserProvider component to fetch user data and provide it to children
-export const UserProvider = ({ children }: ChildrenProps) => {
+export const UserProvider = (
+    { children, config }: 
+    ChildrenProps & {config: Pick<XartaConfig, "PUBLIC_NEXT_API_BASE_URL"> & ConfigPublicRootUrl} ) => {
     // Fetch user data using TanStack Query
     // const { data: user, error: isErrorUser, isLoading: isLoadingUser } = useQuery({
     //     queryKey: ['user'],
@@ -47,7 +52,7 @@ export const UserProvider = ({ children }: ChildrenProps) => {
             isErrorUser: false,
             isLoadingUser: true
         })
-        fetchGhostUser().then(data => {
+        fetchGhostUser({config}).then(data => {
             setUser({
                 user: data,
                 isErrorUser: false,
@@ -76,7 +81,7 @@ export const UserProvider = ({ children }: ChildrenProps) => {
 
     const {data: settings } = useQuery({
         queryKey: ['settings'],
-        queryFn: fetchSettings
+        queryFn: () => fetchSettings({config})
     })
 
     // Provide user data to all children through context

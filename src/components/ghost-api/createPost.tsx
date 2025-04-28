@@ -1,7 +1,7 @@
-import { ROOT_URL } from "@/config/config";
 import { EditarCardProps } from "../functional/EditarCard/EditarCardProps";
+import { ConfigPublicRootUrl } from "./admin/fetchPost";
 
-export async function createPost(post: EditarCardProps["post"] & { lexical?: any; }) {
+export async function createPost(post: EditarCardProps["post"] & { lexical?: any; }, {config}: {config: ConfigPublicRootUrl}) {
   try {
 
     // Validate the required fields
@@ -17,7 +17,7 @@ export async function createPost(post: EditarCardProps["post"] & { lexical?: any
     delete post.lexical;
 
     // Prepare the request to Ghost's Admin API
-    const ghostApiUrl = `${ROOT_URL}/ghost/api/admin/posts/?source=html`;
+    const ghostApiUrl = `${config.PUBLIC_ROOT_URL}/ghost/api/admin/posts/?source=html`;
 
     const ghostResponse = await fetch(ghostApiUrl, {
       method: 'POST',

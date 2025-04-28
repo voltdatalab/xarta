@@ -15,6 +15,8 @@ import TagSelector from "@/components/functional/EditarCard/TagSelector";
 import { GhostTag } from "@/components/types/GhostTag";
 import { Dispatch, SetStateAction, useEffect } from "react";
 import { useTranslations } from "next-intl";
+import { XartaConfig } from "@/config/XartaConfig";
+import { ConfigPublicDemoPassword, ConfigPublicDemoUsername } from "../EditarPerfil";
 
 export function InnerHome({
   posts = [],
@@ -26,6 +28,7 @@ export function InnerHome({
   setSelectedTags,
   setTitleParam,
   setStatusParam,
+  config
 }: {
   posts: Array<GhostPost>,
   isLoading: boolean,
@@ -35,7 +38,8 @@ export function InnerHome({
   selectedTags: GhostTag[],
   setTitleParam: Dispatch<SetStateAction<string>>,
   setStatusParam: Dispatch<SetStateAction<string>>,
-  setSelectedTags: (tags: GhostTag[]) => void
+  setSelectedTags: (tags: GhostTag[]) => void,
+  config: Pick<XartaConfig, "PUBLIC_GHOST_TAGS_PANEL_URL"> & ConfigPublicDemoUsername & ConfigPublicDemoPassword
 }) {
 
   const t = useTranslations('strings');
@@ -69,14 +73,14 @@ export function InnerHome({
 
   return (
     <div className={mainFlexContainer}>
-      <Welcome onNewCard={createCard} name={userName} org={organization} />
+      <Welcome config={config} onNewCard={createCard} name={userName} org={organization} />
       <YourCards posts={posts} className="pt-9 pb-5" />
 
       <div className="flex flex-row gap-[18px] pb-6 flex-wrap justify-items-center">
         <SearchInput onChange={(value) => setTitleParam(value)} />
         <StatusDropdown onChange={(value) => setStatusParam(value)} />
         <div className="flex flex-row items-center relative z-30 grow">
-          <TagSelector tags={tags} selectedTags={selectedTags} onChange={setSelectedTags} showTitle={false} extraClasses="py-1" wrapperClasses="mt-0 w-full" />
+          <TagSelector config={config} tags={tags} selectedTags={selectedTags} onChange={setSelectedTags} showTitle={false} extraClasses="py-1" wrapperClasses="mt-0 w-full" />
         </div>
       </div>
 

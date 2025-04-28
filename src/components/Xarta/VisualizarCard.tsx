@@ -12,21 +12,26 @@ import { useRouter } from "next/navigation";
 import { GhostPost } from "../types/GhostPost";
 import { FilePenIcon } from "./Icons/FilePenIcon";
 import { xartaCardContainerPrefix } from "@/config/config";
-import { XARTA_DOMAIN } from "@/config/config";
 import { mainFlexContainer } from './Home/mainFlexContainer';
 import { cn } from '@/lib/utils';
 import { buttonTransitionStyles } from './Home/RoundedFullButton';
 import { ClipboardCopy } from 'lucide-react';
 import { useGhostUser } from '../functional/GhostUserProvider';
 import { useTranslations } from 'next-intl';
+import { XartaConfig } from "@/config/XartaConfig";
 
-export function VisualizarCardInner({ post, postStatus, postId }: { post: GhostPost, postId:GhostPost["id"], postStatus: GhostPost["status"] }) {
+export type ConfigXartaDomain = Pick<XartaConfig, "XARTA_DOMAIN">;
+
+export function VisualizarCardInner({ post, postStatus, postId, config }: 
+    { post: GhostPost, postId:GhostPost["id"], postStatus: GhostPost["status"],
+        config: ConfigXartaDomain
+     }) {
 
     const t = useTranslations('strings');
 
     const codeSnippet = `<div id="${xartaCardContainerPrefix}${postId}" style="width:100%; max-width:700px">
 </div>
-<script src="${XARTA_DOMAIN}xarta/api/embed-script/${postId}">
+<script src="${config.XARTA_DOMAIN}xarta/api/embed-script/${postId}">
 </script>
 `;
 
@@ -43,7 +48,7 @@ export function VisualizarCardInner({ post, postStatus, postId }: { post: GhostP
         if (!(scriptRef.current)) {
             // Create a new script element
             const script = document.createElement('script');
-            script.src = `${XARTA_DOMAIN}xarta/api/embed-script/${postId}`;
+            script.src = `${config.XARTA_DOMAIN}xarta/api/embed-script/${postId}`;
             script.async = true;
 
             scriptRef.current = script;
@@ -107,7 +112,7 @@ export function VisualizarCardInner({ post, postStatus, postId }: { post: GhostP
 
                     {post.featured ? 
                         <blockquote className="mt-10"><em>{t.rich('CREATIVE_COMMONS_ALLOWED', {
-                            previewlink: (chunks) => <a className="text-[#4b31dd] underline\" href={`${XARTA_DOMAIN}${post.slug}`} target="_blank">{chunks}</a>
+                            previewlink: (chunks) => <a className="text-[#4b31dd] underline\" href={`${config.XARTA_DOMAIN}${post.slug}`} target="_blank">{chunks}</a>
                         }) }</em></blockquote>
                         :
                         null

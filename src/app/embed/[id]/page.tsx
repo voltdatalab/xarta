@@ -1,11 +1,14 @@
 import { EmbeddedClient } from "./EmbeddedClient";
 import { GhostPost } from "@/components/types/GhostPost";
 import { RetryFetchPostEmbed } from "@/components/Xarta/RetryFetchPostEmbed";
-import { INTERNAL_NEXT_API_BASE_URL, PUBLIC_NEXT_API_BASE_URL } from "@/config/config";
+import { INTERNAL_NEXT_API_BASE_URL } from "@/config/config";
+import { getXartaConfig } from "@/config/getConfig";
 import { getLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 
 export default async function EmbeddedPage({ params }: { params: { id: string } }) {
+
+    const config = await getXartaConfig();
 
     const res = await fetch(`${INTERNAL_NEXT_API_BASE_URL}/get-post/?id=${params.id}`, {
         cache: 'no-store'
@@ -49,7 +52,7 @@ export default async function EmbeddedPage({ params }: { params: { id: string } 
     const locale = await getLocale();
 
     return (
-        post ? <EmbeddedClient locale={locale} post={post} postId={params.id} settings={settingsData} globalCodeInjection={codeInjectionData} /> : 
-        <RetryFetchPostEmbed locale={locale} postId={params.id} settings={settingsData} globalCodeInjection={codeInjectionData}  />
+        post ? <EmbeddedClient config={config} locale={locale} post={post} postId={params.id} settings={settingsData} globalCodeInjection={codeInjectionData} /> : 
+        <RetryFetchPostEmbed config={config} locale={locale} postId={params.id} settings={settingsData} globalCodeInjection={codeInjectionData}  />
     );
 }

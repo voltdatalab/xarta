@@ -7,13 +7,13 @@ import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import Tags from './Tags.png';
 import Image from 'next/image'
-import { PUBLIC_GHOST_TAGS_PANEL_URL } from '@/config/config';
 import { cn } from '@/lib/utils';
 import { useTranslations } from 'next-intl';
+import { XartaConfig } from "@/config/XartaConfig";
 
 export function TagSelector(
-  { selectedTags = [], tags = [], onChange, showTitle = true, extraClasses = '', wrapperClasses = '', onCreate }: 
-  { selectedTags?: GhostTag[], tags?: GhostTag[], onChange?: (tag: GhostTag[]) => void, showTitle?: boolean, extraClasses?: string, wrapperClasses?: string,
+  { config, selectedTags = [], tags = [], onChange, showTitle = true, extraClasses = '', wrapperClasses = '', onCreate }: 
+  { config: Pick<XartaConfig, "PUBLIC_GHOST_TAGS_PANEL_URL" | "PUBLIC_DEMO_USERNAME">, selectedTags?: GhostTag[], tags?: GhostTag[], onChange?: (tag: GhostTag[]) => void, showTitle?: boolean, extraClasses?: string, wrapperClasses?: string,
     onCreate?: (tagName: string) => void
    }
 ) {
@@ -112,7 +112,7 @@ export function TagSelector(
               <a className="font-medium text-[#4B31DD]">{t('ADD_TAG_TEXT')} <span className="text-black">&quot;{query}&quot;</span></a>
             </div>   : null }         
             <div className="relative cursor-pointer select-none py-2 px-10 text-gray-500">
-              {process.env.NEXT_PUBLIC_DEMO_USERNAME ? null : <a className="font-medium text-[#4B31DD]" target='_blank' href={PUBLIC_GHOST_TAGS_PANEL_URL}>{t('MANAGE_TAGS_TEXT')}</a>}
+              {config.PUBLIC_DEMO_USERNAME ? null : <a className="font-medium text-[#4B31DD]" target='_blank' href={config.PUBLIC_GHOST_TAGS_PANEL_URL}>{t('MANAGE_TAGS_TEXT')}</a>}
             </div>
           </Combobox.Options>
         </div>

@@ -1,12 +1,12 @@
-import { ROOT_URL } from "@/config/config";
 import { EditarCardProps } from "../functional/EditarCard/EditarCardProps";
+import { ConfigPublicRootUrl } from "./admin/fetchPost";
 
 
-export async function deletePost(id: EditarCardProps["post"]["id"]) {
+export async function deletePost(id: EditarCardProps["post"]["id"], {config}: {config: ConfigPublicRootUrl}) {
   try {
 
     // Prepare the request to Ghost's Admin API
-    const ghostApiUrl = `${ROOT_URL}/ghost/api/admin/posts/${id}`;
+    const ghostApiUrl = `${config.PUBLIC_ROOT_URL}/ghost/api/admin/posts/${id}`;
 
     const ghostResponse = await fetch(ghostApiUrl, {
       method: 'DELETE',

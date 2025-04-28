@@ -1,10 +1,6 @@
 
-export const ROOT_URL = process.env.NEXT_PUBLIC_ROOT_URL ?? process.env.STORYBOOK_ROOT_URL;
 export const INTERNAL_ROOT_URL = process.env.NEXT_INTERNAL_ROOT_URL;
-if (!ROOT_URL) {
-  throw new Error('NEXT_PUBLIC_ROOT_URL should be provided')
-}
-console.log('ROOT_URL:', ROOT_URL);
+
 
 // Database configuration
 export const DB_CONFIG = {
@@ -25,19 +21,8 @@ export const config = {
 export const INTERNAL_GHOST_POSTS_API_URL = `${config.INTERNAL_GHOST_URL}/ghost/api/admin/posts/`;
 export const INTERNAL_GHOST_TAGS_API_URL = `${config.INTERNAL_GHOST_URL}/ghost/api/content/tags/`;
 
-export const PUBLIC_GHOST_ADMIN_API_URL = `${ROOT_URL}/ghost/api/admin/`;
-
-export const PUBLIC_NEXT_XARTA_API_WITH_GHOST_BASE = `${ROOT_URL}/ghost/xarta/api`;
-
-export const PUBLIC_GHOST_TAGS_PANEL_URL = `${ROOT_URL}/ghost/#/tags`;
-
-// Used by the frontend and backend, so we should use the public endpoints
-export const PUBLIC_NEXT_API_BASE_URL = `${ROOT_URL}/xarta/api`;
+// Used backend only
 export const INTERNAL_NEXT_API_BASE_URL = `${INTERNAL_ROOT_URL}/xarta/api`;
-export const XARTA_DOMAIN = `${ROOT_URL}/`;
-
-// frontend only
-export const NEXT_XARTA_BASE_URL = `${ROOT_URL}/xarta`;
 
 // routes and prefixes
 export const CONFIGURACOES = `/settings`;

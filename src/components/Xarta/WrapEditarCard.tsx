@@ -1,32 +1,33 @@
 "use client";
 
 import { useQuery } from '@tanstack/react-query';
-import { ROOT_URL } from "@/config/config";
 import { PostEditorContainer } from "../functional/EditarCard/PostEditorContainer";
 import { Carregando } from './Home/Carregando';
-import { getPost } from '../ghost-api/getPost';
-import { fetchPost } from '../ghost-api/admin/fetchPost';
-import { fetchTags } from '../ghost-api/admin/fetchTags';
+import { ConfigPublicRootUrl, fetchPost } from '../ghost-api/admin/fetchPost';
+import { ConfigGhostApiTagsUrl, fetchTags } from '../ghost-api/admin/fetchTags';
 import { useTranslations } from 'next-intl';
+import { XartaConfig } from "@/config/XartaConfig";
+import { ConfigPublicDemoUsername } from './EditarPerfil';
 
-export const ghostApiTagsUrl = `${ROOT_URL}/ghost/api/admin/tags/?limit=all`
 
-export const useTags = () => useQuery({
+export const useTags = ({config}: {config: ConfigGhostApiTagsUrl}) => useQuery({
     queryKey: ['tags'],
-    queryFn: fetchTags, // Query function to fetch tags
+    queryFn: () => fetchTags({config}), // Query function to fetch tags
 });
 
-export default function WrapEditarCard({ id }: { id: string; }) {
+export default function WrapEditarCard(
+    { id, config }: { id: string; } & 
+    {config: Pick<XartaConfig, "PUBLIC_GHOST_TAGS_PANEL_URL"> & ConfigPublicRootUrl & ConfigGhostApiTagsUrl & ConfigPublicDemoUsername}) {
 
     const t = useTranslations('strings');
 
     const { data: postData, error: postError, isLoading: postLoading } = useQuery({
         queryKey: ['post', id],
-        queryFn: () => fetchPost(id), // Query function
+        queryFn: () => fetchPost(id, config), // Query function
         enabled: !!id,   // Only run the query if the id exists
     });
 
-    const { data: tagsData, error: tagsError, isLoading: tagsLoading } = useTags();
+    const { data: tagsData, error: tagsError, isLoading: tagsLoading } = useTags({config});
 
     if (postLoading || tagsLoading) return <Carregando>
         {t('LOADING_XARTA')}
@@ -37,5 +38,5 @@ export default function WrapEditarCard({ id }: { id: string; }) {
     if (!postData || !postData.posts.length) return <div>{/* No post data available */}</div>;
     if (!tagsData || !tagsData.tags.length) return <div>{/* No tags data available */}</div>;
 
-    return <PostEditorContainer mode="edit" post={postData.posts[0]} tags={tagsData.tags} />;
+    return <PostEditorContainer config={config} mode="edit" post={postData.posts[0]} tags={tagsData.tags} />;
 }

@@ -14,6 +14,9 @@ import { CONFIGURACOES } from "@/config/config";
 import { Toaster } from "@/components/ui/toaster";
 import { GhostTag } from "@/components/types/GhostTag";
 import { useTranslations } from "next-intl";
+import { XartaConfig } from "@/config/XartaConfig";
+import { ConfigPublicRootUrl } from "@/components/ghost-api/admin/fetchPost";
+import { ConfigPublicDemoUsername } from "@/components/Xarta/EditarPerfil";
 
 
 export type SetFeatured = {
@@ -36,7 +39,8 @@ export function EditarCard({
     setFeatured,
     setCodeInjectionHead,
     setCodeInjectionFoot,
-}: EditarCardProps & SetFeatured) {
+    config
+}: EditarCardProps & SetFeatured & {config: Pick<XartaConfig, "PUBLIC_GHOST_TAGS_PANEL_URL"> & ConfigPublicRootUrl & ConfigPublicDemoUsername }) {
 
     const t = useTranslations('strings');
 
@@ -66,7 +70,9 @@ export function EditarCard({
                     maxLength={300}
                 />
                 <div className="space-y-2">
-                    <TagSelector tags={tags} selectedTags={post.tags} onChange={setSelectedTags} onCreate={(e) => {
+                    <TagSelector 
+                        config={config}
+                        tags={tags} selectedTags={post.tags} onChange={setSelectedTags} onCreate={(e) => {
                         const newTagObject = {name: e};
                         // TODO: Remove typecasts below
                         setTags?.([
@@ -147,7 +153,7 @@ export function EditarCard({
 
             <Toaster />
 
-            <PublicarCard id={post.id} mode={mode} post={post} checked={post.featured} onChange={setFeatured} currentAction={currentAction} setCurrentAction={setCurrentAction} />
+            <PublicarCard config={config} id={post.id} mode={mode} post={post} checked={post.featured} onChange={setFeatured} currentAction={currentAction} setCurrentAction={setCurrentAction} />
 
         </div>
     );

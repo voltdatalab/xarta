@@ -22,24 +22,6 @@ services:
     container_name: ${PROJECT_NAME}-next
     build: 
       dockerfile: ./Dockerfile.next
-      args:
-        # Variables for Next.js public and server
-        NEXT_PUBLIC_ROOT_URL: ${PUBLIC_URL}
-        GHOST_ADMIN_API_KEY: ${GHOST_ADMIN_API_KEY}
-        GHOST_CONTENT_API_KEY: ${GHOST_CONTENT_API_KEY}
-        INTERNAL_GHOST_URL: http://${PROJECT_NAME}-caddy
-        NEXT_INTERNAL_ROOT_URL: http://${PROJECT_NAME}-caddy
-        # Used to connect to Xarta Postgres DB
-        XARTA_DB_HOST: ${PROJECT_NAME}-xarta-db
-        XARTA_DB_USER: ${XARTA_DB_USER}
-        XARTA_DB_PASSWORD: ${XARTA_DB_PASSWORD}      
-    command: >
-      bash -c '
-        cd /app &&
-        . ./tools/database/wait-for-postgres.sh && \
-        . ./tools/database/migrate.sh && \
-        node server.js
-      '
     environment:
       # TODO: Verify all env vars have been added
       # Required for get-settings
@@ -53,6 +35,8 @@ services:
       XARTA_DB_HOST: ${PROJECT_NAME}-xarta-db
       XARTA_DB_USER: ${XARTA_DB_USER}
       XARTA_DB_PASSWORD: ${XARTA_DB_PASSWORD}
+      # Variables for Next.js public and server
+      PUBLIC_ROOT_URL: ${PUBLIC_URL}
     networks:
       - frontend
       - backend
@@ -96,7 +80,7 @@ services:
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 5s
-      retries: 10      
+      retries: 10
 
   postgres:
     image: postgres:17

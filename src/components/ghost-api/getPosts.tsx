@@ -1,11 +1,11 @@
-import { ROOT_URL } from "@/config/config";
 import { GhostPost } from "../types/GhostPost";
+import { ConfigPublicRootUrl } from "./admin/fetchPost";
 
-export async function getPosts(params: string = '') {
+export async function getPosts(params: string = '', {config}: {config: ConfigPublicRootUrl}) {
   try {
 
     // Prepare the request to Ghost's Admin API
-    const ghostApiUrl = (params: string = '') => `${ROOT_URL}/ghost/api/admin/posts/?limit=all&formats=html${params}`;
+    const ghostApiUrl = (params: string = '') => `${config.PUBLIC_ROOT_URL}/ghost/api/admin/posts/?limit=all&formats=html${params}`;
 
     const ghostResponse = await fetch(ghostApiUrl(params), {
       method: 'GET',

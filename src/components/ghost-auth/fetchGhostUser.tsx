@@ -1,11 +1,11 @@
 "use client";
 
-import { ROOT_URL } from "@/config/config";
+import { ConfigPublicRootUrl } from "../ghost-api/admin/fetchPost";
 
 // API function to fetch user data
 
-export async function fetchGhostUser() {
-    const response = await fetch(`${ROOT_URL}/ghost/api/admin/users/me/`);
+export async function fetchGhostUser({config}: {config: ConfigPublicRootUrl}) {
+    const response = await fetch(`${config.PUBLIC_ROOT_URL}/ghost/api/admin/users/me/`);
     if (!response.ok) {
         throw new Error('Failed to fetch user data');
     }

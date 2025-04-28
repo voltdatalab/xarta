@@ -1,11 +1,12 @@
-"use client";
-
 import EditarPerfil from "@/components/Xarta/EditarPerfil";
 import { Header } from "@/components/Xarta/Header";
+import { getXartaConfig } from "@/config/getConfig";
 
-export default function Login() {
+export default async function Login() {
+    const config = await getXartaConfig();
+
     return <>
         <Header></Header>
-        <EditarPerfil type="login"></EditarPerfil>
+        <EditarPerfil config={config} type="login"></EditarPerfil>
     </>
 }

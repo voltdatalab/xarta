@@ -1,4 +1,5 @@
-import { XARTA_DOMAIN, xartaCardContainerPrefix } from "@/config/config";
+import { xartaCardContainerPrefix } from "@/config/config";
+import { getXartaConfig } from "@/config/getConfig";
 import { NextResponse } from 'next/server';
 
 // This function only accepts letters and numbers
@@ -11,7 +12,8 @@ export async function GET(
     { params }: { params: { id: string } }
 ) {
 
- 
+    const {XARTA_DOMAIN} = await getXartaConfig();
+
     const scriptContent = `
     (function() {
         function createIframe(postId) {
