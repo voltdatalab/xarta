@@ -24,6 +24,8 @@ clear
 
 $sudo_cmd docker attach ${PROJECT_NAME}-setup-helper
 
-$sudo_cmd docker compose down setup-helper
+# Only remove the container, but not networks still in use
+$sudo_cmd docker compose stop setup-helper
+$sudo_cmd docker compose rm -f setup-helper
 
 popd
