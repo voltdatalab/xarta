@@ -16,6 +16,7 @@ services:
       # Required for get-settings
       INTERNAL_GHOST_URL: http://srv-captain--$$cap_appname
       # TODO: Set automatically via setup-helper
+      # For now, these will have to be manually set by the user
       # GHOST_ADMIN_API_KEY: ${GHOST_ADMIN_API_KEY}
       # GHOST_CONTENT_API_KEY: ${GHOST_CONTENT_API_KEY}
       # Required for set language
@@ -89,3 +90,59 @@ services:
       $$cap_appname-ghost:
         condition: service_started
         restart: false
+
+caproverOneClickApp:
+  variables:
+      
+    - id: '$$cap_ghost_db_password'
+      label: Ghost Database Password
+      description: Password for the Ghost MySQL database.
+      defaultValue: $$cap_gen_random_hex(16)
+      validRegex: '/.{8,}/'
+      
+    - id: '$$cap_xarta_db_user'
+      label: Xarta Database User
+      description: Username for the Xarta PostgreSQL database.
+      defaultValue: 'xarta-db-user'
+      validRegex: '/^[a-zA-Z0-9_]+$/'
+      
+    - id: '$$cap_xarta_db_password'
+      label: Xarta Database Password
+      description: Password for the Xarta PostgreSQL database.
+      defaultValue: $$cap_gen_random_hex(16)
+      validRegex: '/.{8,}/'
+      
+  instructions:
+    start: |-
+      Xarta is a card creation and publishing platform built on top of Ghost CMS.
+      
+      This one-click app will install:
+      - Xarta Next.js frontend
+      - Ghost CMS backend
+      - MySQL database for Ghost
+      - PostgreSQL database for Xarta
+      - Caddy reverse proxy
+      - Setup helper container
+      
+      After installation, you'll need to complete the Xarta setup process by accessing the setup-helper container 
+      and following its instructions.
+      
+      The setup helper will automatically configure the necessary API keys.
+    end: |-
+      Xarta has been successfully pre-deployed!
+
+      The setup helper will automatically configure the necessary API keys.
+
+      Please check its logs and update the remaining env variables accordingly
+      
+      Access your Xarta instance at:
+      https://$$cap_appname.$$cap_root_domain/xarta
+      
+      Access the Ghost admin panel at:
+      https://$$cap_appname.$$cap_root_domain/ghost
+      
+      
+  displayName: Xarta
+  isOfficial: false
+  description: Xarta is a card creation and publishing platform built on top of Ghost CMS.
+  documentation: This configuration is based on the official Xarta docker-compose setup from https://github.com/voltdatalab/xarta
