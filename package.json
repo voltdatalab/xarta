@@ -28,7 +28,7 @@
     "axios": "^1.9.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "jwk-to-pem": "^2.0.6",
     "lucide-react": "^0.445.0",
     "luxon": "^3.5.0",
