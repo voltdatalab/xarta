@@ -4,11 +4,10 @@ services:
 
   caddy:
     container_name: ${PROJECT_NAME}-caddy
-    image: caddy
+    image: ghcr.io/voltdatalab/xarta-entrypoint
     environment:
       PROJECT_NAME: ${PROJECT_NAME}
     volumes:
-      - ./prod/Caddyfile:/etc/caddy/Caddyfile
       - entrypoint_caddy_data:/data
       - entrypoint_caddy_config:/config
     networks:
