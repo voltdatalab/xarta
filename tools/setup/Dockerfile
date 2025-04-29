@@ -12,7 +12,8 @@ COPY ./package-lock.json ./package-lock.json
 RUN npm ci
 
 COPY . .
+RUN chmod +x setup-entrypoint.sh
 
 RUN npm run build
 
-CMD npm start -- --internal-container "$CADDY_CONTAINER_NAME" --real-host "$REAL_HOST"
+ENTRYPOINT ["/app/setup-entrypoint.sh"]

@@ -11,7 +11,7 @@ export interface UserSetup {
   name: string;
   email: string;
   password: string;
-  blogTitle: string;
+  siteTitle: string;
 }
 interface ApiKey {
   id: string;
@@ -56,9 +56,9 @@ export const prompt = async (question: string, defaultAnswer?: string): Promise<
 };
 
 // Generate a secure password
-export const generateSecurePassword = (): string => {
-  const length = 40;
-  const charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_=+';
+export const generateSecurePassword = (length = 40, specialChars = true): string => {
+  const normalChars = `abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789`;
+  const charset = specialChars ? normalChars : `${normalChars}!@#$%^&*()-_=+`;
   const charsetLength = charset.length;
   let password = '';
 

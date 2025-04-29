@@ -46,12 +46,12 @@ export async function ensureAuthenticated(INTERNAL_CONTAINER_NAME: string, userC
 
         console.log('\n');
 
-        // TODO: Remove name and blogtitle
+        // TODO: Remove name and siteTitle
         const forceRepromptCredentials: UserSetup = {
             name: '',
             email: await getAdminEmailPrompt(),
             password: await getAdminPasswordPrompt(),
-            blogTitle: ''
+            siteTitle: ''
         };
 
         console.log('\n');

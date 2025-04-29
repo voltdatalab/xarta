@@ -11,9 +11,18 @@ export async function ensureInitialGhostSetup(isSetupNeeded: boolean, options: {
     if (isSetupNeeded) {
         console.log('\n- Ghost needs initial setup. Please enter:');
 
+        // Automatically populate for Caprover
+        // TODO: Allow custom values
+        if (options.capRover) {
+            options.siteTitle = 'Xarta';
+            options.name = 'Admin User';
+            options.email = `admin-${generateSecurePassword(6)}@example.com`;
+            options.password = generateSecurePassword();
+        }
+
         // Use provided credentials or prompt for them
         userCredentials = {
-            blogTitle: options.blogTitle || await prompt(chalk.blue('- Your Xarta Website title: '), "Xarta"),
+            siteTitle: options.siteTitle || await prompt(chalk.blue('- Your Xarta Website title: '), "Xarta"),
             name: options.name || await prompt(chalk.blue('- Your full name: ')),
             email: options.email || await prompt(chalk.blue('- Your email: ')),
             password: options.password || '',
@@ -51,7 +60,7 @@ export async function ensureInitialGhostSetup(isSetupNeeded: boolean, options: {
                         name: userCredentials.name,
                         email: userCredentials.email,
                         password: userCredentials.password,
-                        blogTitle: userCredentials.blogTitle
+                        blogTitle: userCredentials.siteTitle
                     }]
                 },
                 {
@@ -67,6 +76,11 @@ export async function ensureInitialGhostSetup(isSetupNeeded: boolean, options: {
             // TODO: Improve error typing
             console.error(chalk.red('Error during setup:'), (error as AxiosError<any>).response?.data?.errors);
 
+            if (options.capRover) {
+                // Avoid infinite loops for non-interactive setup
+                process.exit(1);
+            }
+
             return await ensureInitialGhostSetup(isSetupNeeded, options, INTERNAL_CONTAINER_NAME);
         }
     } else {
@@ -77,7 +91,7 @@ export async function ensureInitialGhostSetup(isSetupNeeded: boolean, options: {
             name: '',
             email: options.email || await getAdminEmailPrompt(),
             password: options.password || await getAdminPasswordPrompt(),
-            blogTitle: ''
+            siteTitle: ''
         };
         console.log('\n');
     }
