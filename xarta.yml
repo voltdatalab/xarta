@@ -3,12 +3,13 @@ captainVersion: 4
 services:
 
   $$cap_appname:
-    image: ghcr.io/voltdatalab/xarta-reverse-proxy
+    image: ghcr.io/voltdatalab/xarta-entrypoint
     environment:
       PROJECT_NAME: srv-captain--$$cap_appname
     volumes:
-      - $$cap_appname-entrypoint_caddy_data:/data
-      - $$cap_appname-entrypoint_caddy_config:/config
+      # Do not use underscore
+      - $$cap_appname-entrypoint-caddy-data:/data
+      - $$cap_appname-entrypoint-caddy-config:/config
 
   $$cap_appname-next:
     image: ghcr.io/voltdatalab/xarta
@@ -44,7 +45,7 @@ services:
         - database__connection__password=$$cap_ghost_db_password
         - database__connection__database=ghost
     volumes:
-      - $$cap_appname-xarta_ghost_data:/var/lib/ghost/content
+      - $$cap_appname-xarta-ghost-data:/var/lib/ghost/content
     # Fixes errors when ghost cannot connect to mysql database on init 
     restart: unless-stopped
     depends_on:
@@ -56,7 +57,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: $$cap_ghost_db_password
     volumes:
-      - $$cap_appname-xarta_ghost_db_data:/var/lib/mysql
+      - $$cap_appname-xarta-ghost-db-data:/var/lib/mysql
     # Required, otherwise ghost will fail during startup
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
@@ -70,7 +71,7 @@ services:
       POSTGRES_PASSWORD: $$cap_xarta_db_password
       POSTGRES_DB: "xarta"
     volumes:
-      - $$cap_appname-xarta_db_data:/var/lib/postgresql/data
+      - $$cap_appname-xarta-db-data:/var/lib/postgresql/data
 
   $$cap_appname-setup-helper:
     image: ghcr.io/voltdatalab/xarta-setup
@@ -104,7 +105,7 @@ caproverOneClickApp:
       label: Xarta Database User
       description: Username for the Xarta PostgreSQL database.
       defaultValue: 'xarta-db-user'
-      validRegex: '/^[a-zA-Z0-9_]+$/'
+      validRegex: '/^[a-zA-Z0-9_\-]+$/'
       
     - id: '$$cap_xarta_db_password'
       label: Xarta Database Password
