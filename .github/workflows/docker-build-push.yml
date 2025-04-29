@@ -33,6 +33,29 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      # Build and push Xarta Caddy entrypoint image
+      - name: Extract metadata for entrypoint image
+        id: meta-entrypoint
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.OWNER }}/xarta-entrypoint
+          tags: |
+            type=sha,format=short
+            type=ref,event=branch
+            type=ref,event=tag
+            latest
+
+      - name: Build and push Xarta entrypoint image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./prod/entrypoint
+          file: ./prod/entrypoint/Dockerfile.next
+          push: true
+          tags: ${{ steps.meta-next.outputs.tags }}
+          labels: ${{ steps.meta-next.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
       # Build and push Next.js image
       - name: Extract metadata for Next.js image
         id: meta-next
