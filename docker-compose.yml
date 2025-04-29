@@ -97,7 +97,7 @@ services:
 
   setup-helper:
     container_name: ${PROJECT_NAME}-setup-helper
-    image: ghcr.io/voltdatalab/xarta
+    image: ghcr.io/voltdatalab/xarta-setup
     # TODO: Add custom option to force local build
     # build:
       # context: ./tools/setup
