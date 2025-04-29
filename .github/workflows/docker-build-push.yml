@@ -49,10 +49,10 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: ./prod/entrypoint
-          file: ./prod/entrypoint/Dockerfile.next
+          file: ./prod/entrypoint/Dockerfile
           push: true
-          tags: ${{ steps.meta-next.outputs.tags }}
-          labels: ${{ steps.meta-next.outputs.labels }}
+          tags: ${{ steps.meta-entrypoint.outputs.tags }}
+          labels: ${{ steps.meta-entrypoint.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
