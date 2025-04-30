@@ -28,7 +28,10 @@ services:
       XARTA_DB_USER: $$cap_xarta_db_user
       XARTA_DB_PASSWORD: $$cap_xarta_db_password
       # Variables for Next.js public and server
-      PUBLIC_ROOT_URL: $$cap_appname.$$cap_root_domain
+      # TODO: Allow both HTTP and HTTPS
+      PUBLIC_ROOT_URL: https://$$cap_appname.$$cap_root_domain
+    caproverExtra:
+      notExposeAsWebApp: true      
 
   $$cap_appname-ghost:
     image: ghost:5.118.0
@@ -50,7 +53,9 @@ services:
     restart: unless-stopped
     depends_on:
       $$cap_appname-ghost-db:
-        condition: service_healthy    
+        condition: service_healthy
+    caproverExtra:
+      notExposeAsWebApp: true        
 
   $$cap_appname-ghost-db:
     image: mysql:8.0
@@ -63,6 +68,8 @@ services:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 5s
       retries: 10
+    caproverExtra:
+      notExposeAsWebApp: true      
 
   $$cap_appname-xarta-db:
     image: postgres:17
@@ -72,6 +79,8 @@ services:
       POSTGRES_DB: "xarta"
     volumes:
       - $$cap_appname-xarta-db-data:/var/lib/postgresql/data
+    caproverExtra:
+      notExposeAsWebApp: true      
 
   $$cap_appname-setup-helper:
     image: ghcr.io/voltdatalab/xarta-setup
@@ -79,14 +88,10 @@ services:
       CADDY_CONTAINER_NAME: "srv-captain--$$cap_appname"
       PROJECT_NAME: srv-captain--$$cap_appname
       GHOST_DB_PASSWORD: $$cap_ghost_db_password
-      PUBLIC_URL: $$cap_appname.$$cap_root_domain
-    profiles: [setup]
+      PUBLIC_URL: https://$$cap_appname.$$cap_root_domain
     # Force caprover behavior on setup helper
     command: --caprover
-    # Keeps the container running as an interactive terminal
-    # tty: true
-    # Used to allow providing input to attach
-    # stdin_open: true
+    restart: no
     depends_on:
       $$cap_appname-ghost:
         condition: service_started
