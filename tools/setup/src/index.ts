@@ -133,6 +133,14 @@ XARTA_DB_PASSWORD='${xartaDBCredentials?.password || ''}'
   console.log(chalk.gray('----------------------------------------'));
   console.log('\nCall the ./up.sh script to start Xarta with your new configuration 🎉');
 
+  if (options.capRover){
+    // Do not exit the program since CapRover would keep restarting it.
+    // Schedule a function to run every hour (3600000 milliseconds).
+    setInterval(() => {
+      // Do nothing.
+    }, 3600000);
+  }
+
 };
 
 main().catch(error => {

@@ -3,12 +3,13 @@ captainVersion: 4
 services:
 
   $$cap_appname:
-    image: ghcr.io/voltdatalab/xarta-reverse-proxy
+    image: ghcr.io/voltdatalab/xarta-entrypoint
     environment:
       PROJECT_NAME: srv-captain--$$cap_appname
     volumes:
-      - $$cap_appname-entrypoint_caddy_data:/data
-      - $$cap_appname-entrypoint_caddy_config:/config
+      # Do not use underscore
+      - $$cap_appname-entrypoint-caddy-data:/data
+      - $$cap_appname-entrypoint-caddy-config:/config
 
   $$cap_appname-next:
     image: ghcr.io/voltdatalab/xarta
@@ -27,41 +28,48 @@ services:
       XARTA_DB_USER: $$cap_xarta_db_user
       XARTA_DB_PASSWORD: $$cap_xarta_db_password
       # Variables for Next.js public and server
-      PUBLIC_ROOT_URL: $$cap_appname.$$cap_root_domain
+      # TODO: Allow both HTTP and HTTPS
+      PUBLIC_ROOT_URL: https://$$cap_appname.$$cap_root_domain
+    caproverExtra:
+      notExposeAsWebApp: true      
 
   $$cap_appname-ghost:
     image: ghost:5.118.0
     environment:
-        - url=$$cap_appname.$$cap_root_domain
-        - NODE_ENV=production
+        url: https://$$cap_appname.$$cap_root_domain
+        NODE_ENV: production
         # Disable 2FA so that staff logins don't depend on emails
         # TODO: Consider reenabling
-        - security__staffDeviceVerification=false
-        - database__client=mysql
-        - database__connection__host=srv-captain--$$cap_appname-ghost-db
+        security__staffDeviceVerification: false
+        database__client: mysql
+        database__connection__host: srv-captain--$$cap_appname-ghost-db
         # TODO: Add custom user option?
-        - database__connection__user=root
-        - database__connection__password=$$cap_ghost_db_password
-        - database__connection__database=ghost
+        database__connection__user: root
+        database__connection__password: $$cap_ghost_db_password
+        database__connection__database: ghost
     volumes:
-      - $$cap_appname-xarta_ghost_data:/var/lib/ghost/content
+      - $$cap_appname-xarta-ghost-data:/var/lib/ghost/content
     # Fixes errors when ghost cannot connect to mysql database on init 
     restart: unless-stopped
     depends_on:
       $$cap_appname-ghost-db:
-        condition: service_healthy    
+        condition: service_healthy
+    caproverExtra:
+      notExposeAsWebApp: true        
 
   $$cap_appname-ghost-db:
     image: mysql:8.0
     environment:
       MYSQL_ROOT_PASSWORD: $$cap_ghost_db_password
     volumes:
-      - $$cap_appname-xarta_ghost_db_data:/var/lib/mysql
+      - $$cap_appname-xarta-ghost-db-data:/var/lib/mysql
     # Required, otherwise ghost will fail during startup
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 5s
       retries: 10
+    caproverExtra:
+      notExposeAsWebApp: true      
 
   $$cap_appname-xarta-db:
     image: postgres:17
@@ -70,7 +78,9 @@ services:
       POSTGRES_PASSWORD: $$cap_xarta_db_password
       POSTGRES_DB: "xarta"
     volumes:
-      - $$cap_appname-xarta_db_data:/var/lib/postgresql/data
+      - $$cap_appname-xarta-db-data:/var/lib/postgresql/data
+    caproverExtra:
+      notExposeAsWebApp: true      
 
   $$cap_appname-setup-helper:
     image: ghcr.io/voltdatalab/xarta-setup
@@ -78,14 +88,10 @@ services:
       CADDY_CONTAINER_NAME: "srv-captain--$$cap_appname"
       PROJECT_NAME: srv-captain--$$cap_appname
       GHOST_DB_PASSWORD: $$cap_ghost_db_password
-      PUBLIC_URL: $$cap_appname.$$cap_root_domain
-    profiles: [setup]
+      PUBLIC_URL: https://$$cap_appname.$$cap_root_domain
     # Force caprover behavior on setup helper
     command: --caprover
-    # Keeps the container running as an interactive terminal
-    # tty: true
-    # Used to allow providing input to attach
-    # stdin_open: true
+    restart: no
     depends_on:
       $$cap_appname-ghost:
         condition: service_started
@@ -104,7 +110,7 @@ caproverOneClickApp:
       label: Xarta Database User
       description: Username for the Xarta PostgreSQL database.
       defaultValue: 'xarta-db-user'
-      validRegex: '/^[a-zA-Z0-9_]+$/'
+      validRegex: '/^[a-zA-Z0-9_\-]+$/'
       
     - id: '$$cap_xarta_db_password'
       label: Xarta Database Password
@@ -125,22 +131,31 @@ caproverOneClickApp:
       - Setup helper container
       
       After installation, you'll need to complete the Xarta setup process by accessing the setup-helper container 
-      and following its instructions.
+      and follow its instructions.
       
-      The setup helper will automatically configure the necessary API keys.
     end: |-
       Xarta has been successfully pre-deployed!
 
-      The setup helper will automatically configure the necessary API keys.
+      -----------------------------------------
 
-      Please check its logs and update the remaining env variables accordingly
+      **IMPORTANT:** Please follow the instructions below to finish configuring your Xarta:
+
+      - In $$cap_appname:
+        - Enable HTTPS endpoint;
+        - Redirect all HTTP traffic to HTTPS.
+
+      - Check runtime logs for $$cap_appname-setup-helper and:
+        - Save email and initial password for Xarta/Ghost login;
+        - Update env variables for $$cap_appname-next container;
+        - Optional: delete $$cap_appname-setup-helper after setup is complete.
       
-      Access your Xarta instance at:
+      - Access your Xarta instance at:
       https://$$cap_appname.$$cap_root_domain/xarta
       
-      Access the Ghost admin panel at:
+      - Optional: Access the Ghost admin panel at:
       https://$$cap_appname.$$cap_root_domain/ghost
       
+      -----------------------------------------
       
   displayName: Xarta
   isOfficial: false
