@@ -90,16 +90,38 @@ services:
       GHOST_DB_PASSWORD: $$cap_ghost_db_password
       PUBLIC_URL: https://$$cap_appname.$$cap_root_domain
     # Force caprover behavior on setup helper
-    command: --caprover
-    restart: no
-    depends_on:
-      $$cap_appname-ghost:
-        condition: service_started
-        restart: false
+    # TODO: Bug in caprover? Entrypoint vanishes when command exists
+    command: ["/app/setup-entrypoint.sh", "--cap-rover", "--site-title", "$$cap_site_title" , "--name", "$$cap_admin_name", "--email", "$$cap_admin_email", "--password", "$$cap_admin_password" ]
+    caproverExtra:
+      notExposeAsWebApp: true
 
 caproverOneClickApp:
   variables:
       
+    - id: '$$cap_site_title'
+      label: Site Title
+      description: Site title. Defaults to Xarta, but you may also use your brand's name, for example.
+      defaultValue: Xarta
+      validRegex: '/.{1,}/'    
+
+    - id: '$$cap_admin_name'
+      label: Ghost Admin Full name.
+      description: Full name for the Ghost admin account.
+      defaultValue: Admin User
+      validRegex: '/.{1,}/'
+
+    - id: '$$cap_admin_email'
+      label: Ghost Admin Email
+      description: Login email for the Ghost admin account. You can use yours, if preferred.
+      defaultValue: admin-$$cap_gen_random_hex(6)@example.com
+      validRegex: '/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/'
+
+    - id: '$$cap_admin_password'
+      label: Ghost Admin Initial Password
+      description: Initial Login password for the Ghost admin account. **Important:** You should change this password after setup is complete.
+      defaultValue: $$cap_gen_random_hex(16)
+      validRegex: '/.{10,}/'    
+
     - id: '$$cap_ghost_db_password'
       label: Ghost Database Password
       description: Password for the Ghost MySQL database.
@@ -134,26 +156,39 @@ caproverOneClickApp:
       and follow its instructions.
       
     end: |-
-      Xarta has been successfully pre-deployed!
+      Xarta has been successfully deployed!
 
       -----------------------------------------
 
       **IMPORTANT:** Please follow the instructions below to finish configuring your Xarta:
 
-      - In $$cap_appname:
-        - Enable HTTPS endpoint;
-        - Redirect all HTTP traffic to HTTPS.
+      Open a new browser tab and navigate to the following apps:
 
-      - Check runtime logs for $$cap_appname-setup-helper and:
-        - Save email and initial password for Xarta/Ghost login;
-        - Update env variables for $$cap_appname-next container;
-        - Optional: delete $$cap_appname-setup-helper after setup is complete.
+      https://captain.$$cap_root_domain/#/apps/details/$$cap_appname
+      - In app "$$cap_appname":
+        - Activate "Enable HTTPS" for the desired url;
+        - Enable "Force HTTPS by redirecting all HTTP traffic to HTTPS" option;
+        - Save and restart.
+
+      https://captain.$$cap_root_domain/#/apps/details/$$cap_appname-setup-helper
+      - In app "$$cap_appname-setup-helper":
+        - Go to "Deployment" tab and view the App Logs;
+        - Copy GHOST_CONTENT_API_KEY and GHOST_ADMIN_API_KEY env variables for $$cap_appname-next container:
+          - Open a new browser tab: https://captain.$$cap_root_domain/#/apps/details/$$cap_appname-next
+          - In App Configs, toggle the Bulk Edit button, and add both GHOST_CONTENT_API_KEY and GHOST_ADMIN_API_KEY values;
+          - Save and restart;
+        - Optional: delete "$$cap_appname-setup-helper" after setup is complete.
       
-      - Access your Xarta instance at:
+      - **Important**: Access the Ghost admin panel at:
+      https://$$cap_appname.$$cap_root_domain/ghost/#/settings/staff
+      - Login with your credentials:
+        - Email: $$cap_admin_email
+        - Password: $$cap_admin_password
+        - **Please change your password as soon as possible!**
+          - Click your username ($$cap_admin_name) > View Profile > Password > Change
+
+      - Finally, access your Xarta instance at:
       https://$$cap_appname.$$cap_root_domain/xarta
-      
-      - Optional: Access the Ghost admin panel at:
-      https://$$cap_appname.$$cap_root_domain/ghost
       
       -----------------------------------------
       
