@@ -131,22 +131,31 @@ caproverOneClickApp:
       - Setup helper container
       
       After installation, you'll need to complete the Xarta setup process by accessing the setup-helper container 
-      and following its instructions.
+      and follow its instructions.
       
-      The setup helper will automatically configure the necessary API keys.
     end: |-
       Xarta has been successfully pre-deployed!
 
-      The setup helper will automatically configure the necessary API keys.
+      -----------------------------------------
 
-      Please check its logs and update the remaining env variables accordingly
+      **IMPORTANT:** Please follow the instructions below to finish configuring your Xarta:
+
+      - In $$cap_appname:
+        - Enable HTTPS endpoint;
+        - Redirect all HTTP traffic to HTTPS.
+
+      - Check runtime logs for $$cap_appname-setup-helper and:
+        - Save email and initial password for Xarta/Ghost login;
+        - Update env variables for $$cap_appname-next container;
+        - Optional: delete $$cap_appname-setup-helper after setup is complete.
       
-      Access your Xarta instance at:
+      - Access your Xarta instance at:
       https://$$cap_appname.$$cap_root_domain/xarta
       
-      Access the Ghost admin panel at:
+      - Optional: Access the Ghost admin panel at:
       https://$$cap_appname.$$cap_root_domain/ghost
       
+      -----------------------------------------
       
   displayName: Xarta
   isOfficial: false
