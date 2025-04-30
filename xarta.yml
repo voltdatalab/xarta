@@ -33,17 +33,17 @@ services:
   $$cap_appname-ghost:
     image: ghost:5.118.0
     environment:
-        - url=$$cap_appname.$$cap_root_domain
-        - NODE_ENV=production
+        url: https://$$cap_appname.$$cap_root_domain
+        NODE_ENV: production
         # Disable 2FA so that staff logins don't depend on emails
         # TODO: Consider reenabling
-        - security__staffDeviceVerification=false
-        - database__client=mysql
-        - database__connection__host=srv-captain--$$cap_appname-ghost-db
+        security__staffDeviceVerification: false
+        database__client: mysql
+        database__connection__host: srv-captain--$$cap_appname-ghost-db
         # TODO: Add custom user option?
-        - database__connection__user=root
-        - database__connection__password=$$cap_ghost_db_password
-        - database__connection__database=ghost
+        database__connection__user: root
+        database__connection__password: $$cap_ghost_db_password
+        database__connection__database: ghost
     volumes:
       - $$cap_appname-xarta-ghost-data:/var/lib/ghost/content
     # Fixes errors when ghost cannot connect to mysql database on init 
