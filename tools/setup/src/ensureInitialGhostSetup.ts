@@ -11,15 +11,6 @@ export async function ensureInitialGhostSetup(isSetupNeeded: boolean, options: {
     if (isSetupNeeded) {
         console.log('\n- Ghost needs initial setup. Please enter:');
 
-        // Automatically populate for Caprover
-        // TODO: Allow custom values
-        if (options.capRover) {
-            options.siteTitle = 'Xarta';
-            options.name = 'Admin User';
-            options.email = `admin-${generateSecurePassword(6)}@example.com`;
-            options.password = generateSecurePassword();
-        }
-
         // Use provided credentials or prompt for them
         userCredentials = {
             siteTitle: options.siteTitle || await prompt(chalk.blue('- Your Xarta Website title: '), "Xarta"),
