@@ -45,7 +45,8 @@ RUN adduser --system --uid 1001 nextjs
 # Required for postgres migrations
 # bash is required for migration scripts
 # TODO: Consider removing bash from scripts
-RUN apk add postgresql-client bash
+# Install inotify-tools for file watching
+RUN apk add postgresql-client bash inotify-tools
 COPY --from=builder /app/public ./public
 # Set the correct permission for prerender cache
 RUN mkdir .next
@@ -63,10 +64,17 @@ EXPOSE 3000
 ENV PORT 3000
 # set hostname to localhost
 ENV HOSTNAME "0.0.0.0"
-# Run scripts then start the server
+# Run scripts then start the server with inotify watching .env file
 # server.js is created by next build from the standalone output
 # https://nextjs.org/docs/pages/api-reference/next-config-js/output
 CMD bash -c " \
   ./tools/database/wait-for-postgres.sh && \
   ./tools/database/migrate.sh && \
-  node server.js"
+  node server.js & \
+  NODE_PID=\$! && \
+  while inotifywait -e modify,create,delete,move /app/.env; do \
+    echo \"Detected change in .env file. Restarting server...\" && \
+    kill \$NODE_PID && \
+    node server.js & \
+    NODE_PID=\$! \
+  done"
