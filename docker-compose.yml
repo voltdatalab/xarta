@@ -114,6 +114,7 @@ services:
     networks:
      - backend
      - frontend
+    restart: no
     depends_on:
       ghost:
         condition: service_started

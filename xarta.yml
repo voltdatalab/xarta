@@ -29,14 +29,14 @@ services:
       XARTA_DB_PASSWORD: $$cap_xarta_db_password
       # Variables for Next.js public and server
       # TODO: Allow both HTTP and HTTPS
-      PUBLIC_ROOT_URL: https://$$cap_appname.$$cap_root_domain
+      PUBLIC_ROOT_URL: $$cap_public_url
     caproverExtra:
       notExposeAsWebApp: true      
 
   $$cap_appname-ghost:
     image: ghost:5.118.0
     environment:
-        url: https://$$cap_appname.$$cap_root_domain
+        url: $$cap_public_url
         NODE_ENV: production
         # Disable 2FA so that staff logins don't depend on emails
         # TODO: Consider reenabling
@@ -88,7 +88,7 @@ services:
       CADDY_CONTAINER_NAME: "srv-captain--$$cap_appname"
       PROJECT_NAME: srv-captain--$$cap_appname
       GHOST_DB_PASSWORD: $$cap_ghost_db_password
-      PUBLIC_URL: https://$$cap_appname.$$cap_root_domain
+      PUBLIC_URL: $$cap_public_url
     # Force caprover behavior on setup helper
     # TODO: Bug in caprover? Entrypoint vanishes when command exists
     command: ["/app/setup-entrypoint.sh", "--cap-rover", "--site-title", "$$cap_site_title" , "--name", "$$cap_admin_name", "--email", "$$cap_admin_email", "--password", "$$cap_admin_password" ]
@@ -97,12 +97,27 @@ services:
 
 caproverOneClickApp:
   variables:
-      
+
+    - id: $$cap_public_url
+      label: Public URL
+      description: |
+        Enter the public URL for your app, which must use HTTPS. 
+        
+        **Important: You must change the default string! ** Either:
+
+        - **Use the default app domain:** **replace only the uppercase string `APP_NAME_HERE` with the same value as above**.
+
+        - **Use a custom domain:** simply replace the entire value with the domain.
+
+      defaultValue: https://APP_NAME_HERE.$$cap_root_domain
+      validRegex: '/^https:\/\//'
+
+
     - id: '$$cap_site_title'
       label: Site Title
       description: Site title. Defaults to Xarta, but you may also use your brand's name, for example.
       defaultValue: Xarta
-      validRegex: '/.{1,}/'    
+      validRegex: '/.{1,}/'
 
     - id: '$$cap_admin_name'
       label: Ghost Admin Full name.
@@ -139,7 +154,7 @@ caproverOneClickApp:
       description: Password for the Xarta PostgreSQL database.
       defaultValue: $$cap_gen_random_hex(16)
       validRegex: '/.{8,}/'
-      
+
   instructions:
     start: |-
       Xarta is a card creation and publishing platform built on top of Ghost CMS.
@@ -164,23 +179,24 @@ caproverOneClickApp:
 
       Open a new browser tab and navigate to the following apps:
 
-      https://captain.$$cap_root_domain/#/apps/details/$$cap_appname
+      [https://captain.$$cap_root_domain/#/apps/details/$$cap_appname](https://captain.$$cap_root_domain/#/apps/details/$$cap_appname)
       - In app "$$cap_appname":
+        - If you're using a custom domain, add it to the list, and then remove the default domain;
         - Activate "Enable HTTPS" for the desired url;
         - Enable "Force HTTPS by redirecting all HTTP traffic to HTTPS" option;
         - Save and restart.
 
-      https://captain.$$cap_root_domain/#/apps/details/$$cap_appname-setup-helper
+      [https://captain.$$cap_root_domain/#/apps/details/$$cap_appname-setup-helper](https://captain.$$cap_root_domain/#/apps/details/$$cap_appname-setup-helper)
       - In app "$$cap_appname-setup-helper":
         - Go to "Deployment" tab and view the App Logs;
-        - Copy GHOST_CONTENT_API_KEY and GHOST_ADMIN_API_KEY env variables for $$cap_appname-next container:
-          - Open a new browser tab: https://captain.$$cap_root_domain/#/apps/details/$$cap_appname-next
-          - In App Configs, toggle the Bulk Edit button, and add both GHOST_CONTENT_API_KEY and GHOST_ADMIN_API_KEY values;
+        - Copy `GHOST_CONTENT_API_KEY` and `GHOST_ADMIN_API_KEY` env variables for $$cap_appname-next container:
+          - Open a new browser tab: [https://captain.$$cap_root_domain/#/apps/details/$$cap_appname-next](https://captain.$$cap_root_domain/#/apps/details/$$cap_appname-setup-helper)
+          - In App Configs, toggle the Bulk Edit button, and add both `GHOST_CONTENT_API_KEY` and `GHOST_ADMIN_API_KEY` values;
           - Save and restart;
         - Optional: delete "$$cap_appname-setup-helper" after setup is complete.
       
       - **Important**: Access the Ghost admin panel at:
-      https://$$cap_appname.$$cap_root_domain/ghost/#/settings/staff
+      [$$cap_public_url/ghost/#/settings/staff]($$cap_public_url/ghost/#/settings/staff)
       - Login with your credentials:
         - Email: $$cap_admin_email
         - Password: $$cap_admin_password
@@ -188,7 +204,7 @@ caproverOneClickApp:
           - Click your username ($$cap_admin_name) > View Profile > Password > Change
 
       - Finally, access your Xarta instance at:
-      https://$$cap_appname.$$cap_root_domain/xarta
+      [$$cap_public_url/xarta]($$cap_public_url/xarta)
       
       -----------------------------------------
       
