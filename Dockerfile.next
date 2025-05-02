@@ -59,7 +59,7 @@ COPY ./tools/scripts ./tools/scripts
 RUN chmod +x ./tools/database/wait-for-postgres.sh ./tools/database/migrate.sh
 # Create an empty .env file so that inotifywait does not throw missing file errors.
 # TODO: Explore alternatives
-RUN touch /.setup-manager/.env
+RUN mkdir -p /.setup-manager/ && touch /.setup-manager/.env
 RUN touch /app/.env
 USER nextjs
 EXPOSE 3000
