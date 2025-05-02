@@ -191,14 +191,6 @@ caproverOneClickApp:
         - Activate `Enable HTTPS` for the desired domain;
         - Enable option `Force HTTPS by redirecting all HTTP traffic to HTTPS`;
         - Save and restart.
-
-      [https://captain.$$cap_root_domain/#/apps/details/$$cap_appname-setup-helper](https://captain.$$cap_root_domain/#/apps/details/$$cap_appname-setup-helper)
-      - Optional: Delete `$$cap_appname-setup-helper` after setup is complete:
-          - Click `Deployment` and analyze logs at `View App Logs`/`Hide App Logs`.
-          - Ensure `🎉 Xarta Setup Complete!` shows in the logs.
-          - Go back to `HTTP Settings` and click `Delete App`.
-            - Optional: deselect volume `$$cap_appname-setup-helper-data`.
-            - **Note:** volume `$$cap_appname-setup-helper-data` will not be removed as it is being used by containers.
       
       - **Important**: Access the Ghost admin panel at:
       [$$cap_public_url/ghost/#/settings/staff]($$cap_public_url/ghost/#/settings/staff)
@@ -207,6 +199,14 @@ caproverOneClickApp:
           - Password: `$$cap_admin_password`
           - **Please change your password as soon as possible!**
             - Click your username (`$$cap_admin_name`) > View Profile > Password > Change
+
+      [https://captain.$$cap_root_domain/#/apps/details/$$cap_appname-setup-helper](https://captain.$$cap_root_domain/#/apps/details/$$cap_appname-setup-helper)
+      - Optional: Delete `$$cap_appname-setup-helper` after setup is complete:
+          - Click `Deployment` and analyze logs at `View App Logs`/`Hide App Logs`.
+          - Ensure `🎉 Xarta Setup Complete!` shows in the logs.
+          - Go back to `HTTP Settings` and click `Delete App`.
+            - Optional: deselect volume `$$cap_appname-setup-helper-data`.
+            - **Note:** volume `$$cap_appname-setup-helper-data` will not be removed as it is being used by containers.
 
       - Finally, access your Xarta instance at:
       [$$cap_public_url/xarta]($$cap_public_url/xarta)
