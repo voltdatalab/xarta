@@ -78,7 +78,7 @@ CMD ["bash", "-c", "\
   NODE_PID=$! && \
   while inotifywait -e modify,create,delete,move /.setup-manager/.env; do \
     echo 'Detected change in /.setup-manager/.env file. Restarting server...' && \
-    cat /.setup-manager/.env > /app/.env
+    cat /.setup-manager/.env > /app/.env && \
     kill -TERM $NODE_PID && \
     while lsof -i :3000 >/dev/null 2>&1; do sleep 0.2; done && \
     node server.js & \
