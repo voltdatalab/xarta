@@ -45,6 +45,8 @@ RUN adduser --system --uid 1001 nextjs
 # TODO: Consider removing bash from scripts
 # Install inotify-tools for file watching
 RUN apk add postgresql-client bash inotify-tools
+# Install nodemon for monitoring .env changes
+RUN npm install -g nodemon
 COPY --from=builder /app/public ./public
 # Set the correct permission for prerender cache
 RUN mkdir .next
@@ -72,18 +74,9 @@ ENV HOSTNAME "0.0.0.0"
 # server.js is created by next build from the standalone output
 # https://nextjs.org/docs/pages/api-reference/next-config-js/output
 # TODO: Abstract port config for Next.js
-CMD ["bash", "-c", "\
+CMD ["nodemon", "--watch", "/.setup-helper/.env", "--exec", "bash", "-c", "\
+  cat /.setup-helper/.env > /app/.env && \
   ./tools/database/wait-for-postgres.sh && \
   ./tools/database/migrate.sh && \
-  echo $(pwd) && \
-  cat /.setup-helper/.env > /app/.env && \
-  node server.js & \
-  NODE_PID=$! && \
-  while inotifywait -e modify,create,delete,move /.setup-helper/.env; do \
-    echo 'Detected change in /.setup-helper/.env file. Restarting server...' && \
-    kill -TERM $NODE_PID && \
-    cat /.setup-helper/.env > /app/.env && \
-    while lsof -i :3000 >/dev/null 2>&1; do sleep 0.2; done && \
-    node server.js & \
-    NODE_PID=$!; \
-  done"]
+  while lsof -i :3000 >/dev/null 2>&1; do sleep 0.2; done && \
+  node server.js"]
