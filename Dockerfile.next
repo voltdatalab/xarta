@@ -59,6 +59,7 @@ COPY ./tools/scripts ./tools/scripts
 RUN chmod +x ./tools/database/wait-for-postgres.sh ./tools/database/migrate.sh
 # Create an empty .env file so that inotifywait does not throw missing file errors.
 # TODO: Explore alternatives
+RUN touch /.setup-manager/.env
 RUN touch /app/.env
 USER nextjs
 EXPOSE 3000
@@ -75,8 +76,9 @@ CMD ["bash", "-c", "\
   echo $(pwd) && \
   node server.js & \
   NODE_PID=$! && \
-  while inotifywait -e modify,create,delete,move /app/.env; do \
-    echo 'Detected change in .env file. Restarting server...' && \
+  while inotifywait -e modify,create,delete,move /.setup-manager/.env; do \
+    echo 'Detected change in /.setup-manager/.env file. Restarting server...' && \
+    cat /.setup-manager/.env > /app/.env
     kill -TERM $NODE_PID && \
     while lsof -i :3000 >/dev/null 2>&1; do sleep 0.2; done && \
     node server.js & \
