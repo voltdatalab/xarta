@@ -107,7 +107,7 @@ caproverOneClickApp:
       description: |
         Enter the public URL for your app, which must use HTTPS. 
         
-        **Important: You must change the default string! ** Either:
+        **Important: You must change the default string!** Either:
 
         - **Use the default app domain:** **replace only the uppercase string `APP_NAME_HERE` with the same value as above**.
 
@@ -179,33 +179,33 @@ caproverOneClickApp:
 
       -----------------------------------------
 
-      **IMPORTANT:** Please follow the instructions below to finish configuring your Xarta:
+      Please follow the instructions below to finish configuring your Xarta:
 
-      Open a new browser tab and navigate to the following apps:
+      **IMPORTANT: Open the links below in a new browser tab to avoid navigating away from this page!**
 
       [https://captain.$$cap_root_domain/#/apps/details/$$cap_appname](https://captain.$$cap_root_domain/#/apps/details/$$cap_appname)
-      - In app "$$cap_appname":
-        - If you're using a custom domain, add it to the list, and then remove the default domain;
-        - Activate "Enable HTTPS" for the desired url;
-        - Enable "Force HTTPS by redirecting all HTTP traffic to HTTPS" option;
+      - In app `$$cap_appname`:
+        - If you're using a custom domain:
+          - Add the custom domain to the list, then click `Connect New Domain`.
+          - Point your DNS records to the IP address of the server running CapRover.
+        - Activate `Enable HTTPS` for the desired domain;
+        - Enable option `Force HTTPS by redirecting all HTTP traffic to HTTPS`;
         - Save and restart.
 
       [https://captain.$$cap_root_domain/#/apps/details/$$cap_appname-setup-helper](https://captain.$$cap_root_domain/#/apps/details/$$cap_appname-setup-helper)
-      - In app "$$cap_appname-setup-helper":
-        - Go to "Deployment" tab and view the App Logs;
-        - Copy `GHOST_CONTENT_API_KEY` and `GHOST_ADMIN_API_KEY` env variables for $$cap_appname-next container:
-          - Open a new browser tab: [https://captain.$$cap_root_domain/#/apps/details/$$cap_appname-next](https://captain.$$cap_root_domain/#/apps/details/$$cap_appname-setup-helper)
-          - In App Configs, toggle the Bulk Edit button, and add both `GHOST_CONTENT_API_KEY` and `GHOST_ADMIN_API_KEY` values;
-          - Save and restart;
-        - Optional: delete "$$cap_appname-setup-helper" after setup is complete.
+      - Optional: Delete `$$cap_appname-setup-helper` after setup is complete:
+          - Click `Deployment` and analyze logs at `View App Logs`/`Hide App Logs`.
+          - Ensure `🎉 Xarta Setup Complete!` shows in the logs.
+          - Go back to `HTTP Settings` and click `Delete App`.
+            - **Note:** volume `$$cap_appname-setup-helper-data` will not be removed as it is being used by containers.
       
       - **Important**: Access the Ghost admin panel at:
       [$$cap_public_url/ghost/#/settings/staff]($$cap_public_url/ghost/#/settings/staff)
-      - Login with your credentials:
-        - Email: $$cap_admin_email
-        - Password: $$cap_admin_password
-        - **Please change your password as soon as possible!**
-          - Click your username ($$cap_admin_name) > View Profile > Password > Change
+        - Login with your credentials:
+          - Email: `$$cap_admin_email`
+          - Password: `$$cap_admin_password`
+          - **Please change your password as soon as possible!**
+            - Click your username (`$$cap_admin_name`) > View Profile > Password > Change
 
       - Finally, access your Xarta instance at:
       [$$cap_public_url/xarta]($$cap_public_url/xarta)
