@@ -78,5 +78,4 @@ CMD ["nodemon", "--watch", "/.setup-helper/.env", "--exec", "bash", "-c", "\
   cat /.setup-helper/.env > /app/.env && \
   ./tools/database/wait-for-postgres.sh && \
   ./tools/database/migrate.sh && \
-  while lsof -i :3000 >/dev/null 2>&1; do sleep 0.2; done && \
   node server.js"]
