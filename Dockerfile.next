@@ -61,7 +61,7 @@ RUN chmod +x ./tools/database/wait-for-postgres.sh ./tools/database/migrate.sh
 # TODO: Explore alternatives
 RUN mkdir -p /.setup-manager/ && touch /.setup-manager/.env
 RUN touch /app/.env && \
-    chown root:nextjs /app/.env && \
+    chown nextjs:nodejs /app/.env && \
     chmod 664 /app/.env
 USER nextjs
 EXPOSE 3000
