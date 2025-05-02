@@ -38,6 +38,8 @@ services:
       XARTA_DB_PASSWORD: ${XARTA_DB_PASSWORD}
       # Variables for Next.js public and server
       PUBLIC_ROOT_URL: ${PUBLIC_URL}
+    volumes:
+      - setup_helper_data:/.setup-helper
     networks:
       - frontend
       - backend
@@ -98,6 +100,8 @@ services:
   setup-helper:
     container_name: ${PROJECT_NAME}-setup-helper
     image: ghcr.io/voltdatalab/xarta-setup
+    volumes:
+      - setup_helper_data:/.setup-helper
     # TODO: Add custom option to force local build
     # build:
       # context: ./tools/setup
@@ -137,3 +141,5 @@ volumes:
     name: ${PROJECT_NAME}_xarta_db_data
   dev_xarta_ghost_db_data:
     name: ${PROJECT_NAME}_xarta_ghost_db_data
+  setup_helper_data:
+    name: ${PROJECT_NAME}_setup_helper_data

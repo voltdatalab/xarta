@@ -1,6 +1,6 @@
 import { Command } from 'commander';
 import chalk from 'chalk';
-import { Integration } from './utils';
+import { Integration, saveEnv } from './utils';
 import { checkGhostStatus } from './checkGhostStatus';
 import { ensureInitialGhostSetup } from './ensureInitialGhostSetup';
 import { ensureAuthenticated } from './ensureAuthenticated';
@@ -116,17 +116,13 @@ XARTA_DB_PASSWORD='${xartaDBCredentials?.password || ''}'
 
   console.log(chalk.gray('----------------------------------------'));
   console.log('Environment Variables:');
-  console.log(chalk.yellow(`⚠️  Please add these variables to your project's .env file:`));
   console.log(chalk.bold(chalk.gray('.env')));
   console.log(chalk.gray('----------------------------------------\n'));
   console.log(envContent);
   console.log(chalk.gray('----------------------------------------'));
 
-  if (!(options.capRover)) {
-    console.log('\n');
-    await pressAnyKeyToContinue(chalk.blue("Press any key to continue after updating your .env file..."));
-    console.log('\n');
-  }
+  saveEnv(envContent);
+
   console.log('\n');
 
   console.log(chalk.magentaBright('🎉 Xarta Setup Complete!'));

@@ -30,6 +30,8 @@ services:
       # Variables for Next.js public and server
       # TODO: Allow both HTTP and HTTPS
       PUBLIC_ROOT_URL: $$cap_public_url
+    volumes:
+      - $$cap_appname-setup-helper-data:/.setup-helper      
     caproverExtra:
       notExposeAsWebApp: true      
 
@@ -92,6 +94,8 @@ services:
     # Force caprover behavior on setup helper
     # TODO: Bug in caprover? Entrypoint vanishes when command exists
     command: ["/app/setup-entrypoint.sh", "--cap-rover", "--site-title", "$$cap_site_title" , "--name", "$$cap_admin_name", "--email", "$$cap_admin_email", "--password", "$$cap_admin_password" ]
+    volumes:
+      - $$cap_appname-setup-helper-data:/.setup-helper
     caproverExtra:
       notExposeAsWebApp: true
 

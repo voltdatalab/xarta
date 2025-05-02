@@ -1,5 +1,7 @@
 import chalk from 'chalk';
 import * as readline from 'readline';
+import fs from 'fs';
+import path from 'path';
 
 // Interfaces
 export interface SetupStatus {
@@ -96,4 +98,27 @@ export async function getXartaDBPasswordPrompt() {
 
 export async function getGhostDBPasswordPrompt() {
   return await prompt(chalk.blue('Choose a password for Ghost DB connection: '));
+}
+
+/**
+ * Save a string to /.setup-helper/.env
+ * @param {string} content - The content to save to the .env file.
+ */
+export function saveEnv(content: string) {
+  const dirPath = path.resolve('/', '.setup-helper');
+  const filePath = path.join(dirPath, '.env');
+
+  try {
+    // Ensure the directory exists
+    if (!fs.existsSync(dirPath)) {
+      fs.mkdirSync(dirPath, { recursive: true });
+    }
+
+    // Write content to the file
+    fs.writeFileSync(filePath, content, 'utf8');
+
+    console.log(`.env file saved to ${filePath}`);
+  } catch (err) {
+    console.error('Failed to save .env file:', err);
+  }
 }
