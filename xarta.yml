@@ -197,6 +197,7 @@ caproverOneClickApp:
           - Click `Deployment` and analyze logs at `View App Logs`/`Hide App Logs`.
           - Ensure `🎉 Xarta Setup Complete!` shows in the logs.
           - Go back to `HTTP Settings` and click `Delete App`.
+            - Optional: deselect volume `$$cap_appname-setup-helper-data`.
             - **Note:** volume `$$cap_appname-setup-helper-data` will not be removed as it is being used by containers.
       
       - **Important**: Access the Ghost admin panel at:
