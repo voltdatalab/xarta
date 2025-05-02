@@ -32,8 +32,6 @@ RUN mkdir -p /app/public
 # Using echo below to improve debugging during build
 RUN echo "NEXT_PUBLIC_ROOT_URL: $NEXT_PUBLIC_ROOT_URL, INTERNAL_GHOST_URL: $INTERNAL_GHOST_URL" && \
     npm run build
-
-
 # Production image, copy all the files and run next
 FROM base AS runner
 WORKDIR /app
@@ -59,6 +57,9 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY ./tools/database ./tools/database
 COPY ./tools/scripts ./tools/scripts
 RUN chmod +x ./tools/database/wait-for-postgres.sh ./tools/database/migrate.sh
+# Create an empty .env file so that inotifywait does not throw missing file errors.
+# TODO: Explore alternatives
+RUN touch /app/.env
 USER nextjs
 EXPOSE 3000
 ENV PORT 3000
@@ -67,14 +68,17 @@ ENV HOSTNAME "0.0.0.0"
 # Run scripts then start the server with inotify watching .env file
 # server.js is created by next build from the standalone output
 # https://nextjs.org/docs/pages/api-reference/next-config-js/output
-CMD bash -c " \
+# TODO: Abstract port config for Next.js
+CMD ["bash", "-c", "\
   ./tools/database/wait-for-postgres.sh && \
   ./tools/database/migrate.sh && \
+  echo $(pwd) && \
   node server.js & \
-  NODE_PID=\$! && \
+  NODE_PID=$! && \
   while inotifywait -e modify,create,delete,move /app/.env; do \
-    echo \"Detected change in .env file. Restarting server...\" && \
-    kill \$NODE_PID && \
+    echo 'Detected change in .env file. Restarting server...' && \
+    kill -TERM $NODE_PID && \
+    while lsof -i :3000 >/dev/null 2>&1; do sleep 0.2; done && \
     node server.js & \
-    NODE_PID=\$! \
-  done"
+    NODE_PID=$!; \
+  done"]
