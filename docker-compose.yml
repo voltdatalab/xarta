@@ -20,9 +20,6 @@ services:
   next:
     container_name: ${PROJECT_NAME}-next
     image: ghcr.io/voltdatalab/xarta
-    # TODO: Add custom option to force local build
-    # build: 
-      # dockerfile: ./Dockerfile.next
     environment:
       # TODO: Verify all env vars have been added
       # Required for get-settings
@@ -102,9 +99,6 @@ services:
     image: ghcr.io/voltdatalab/xarta-setup
     volumes:
       - setup_helper_data:/.setup-helper
-    # TODO: Add custom option to force local build
-    # build:
-      # context: ./tools/setup
     environment:
       CADDY_CONTAINER_NAME: "${PROJECT_NAME}-caddy"
       PROJECT_NAME: ${PROJECT_NAME}
