@@ -16,10 +16,6 @@ services:
     environment:
       # Required for get-settings
       INTERNAL_GHOST_URL: http://srv-captain--$$cap_appname
-      # TODO: Set automatically via setup-helper
-      # For now, these will have to be manually set by the user
-      # GHOST_ADMIN_API_KEY: ${GHOST_ADMIN_API_KEY}
-      # GHOST_CONTENT_API_KEY: ${GHOST_CONTENT_API_KEY}
       # Required for set language
       NEXT_INTERNAL_ROOT_URL: http://srv-captain--$$cap_appname
       # Used to connect to Xarta Postgres DB
