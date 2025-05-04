@@ -1,0 +1,13 @@
+
+# This docker-compose.local.yml file should override the docker-compose.yml file
+
+services:
+  next:
+    # Force local build
+    build: 
+      dockerfile: ./Dockerfile.next
+
+  setup-helper:
+    # Force local build
+    build:
+      context: ./tools/setup
