@@ -60,6 +60,8 @@ A dynamic card manager built on top of Ghost CMS.
     . ./reset.sh
     ```
 
+**Note:** If you intend to build production images locally for the commands above, use `up-local.sh` and `setup-local.sh` instead of the other scripts, respectively.
+
 ## Xarta Customization
 
 - You may configure styling for classes `xarta-card`, `xarta-title`, `xarta-excerpt`, `xarta-updated-at`, `xarta-content`, `xarta-footer`, `xarta-custom-logo`, `xarta-default-logo` to further customize your card.
