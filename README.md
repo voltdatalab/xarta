@@ -60,6 +60,18 @@ A dynamic card manager built on top of Ghost CMS.
     . ./reset.sh
     ```
 
+**Note:** If you intend to build production images locally for the commands above, use `up-local.sh` and `setup-local.sh` instead of the other scripts, respectively.
+
+### Installation with CapRover (One-Click App)
+
+We have created a one-click app template which can be used in CapRover instances. You can use it by following these steps ([source](https://github.com/caprover/one-click-apps?tab=readme-ov-file#test-your-one-click-apps)):
+
+- Login to your CapRover dashboard
+- Go to `apps` and click on `One-Click Apps/Databases`
+- Select `>> TEMPLATE <<` at the bottom of the dropdown list
+- Copy and paste the `xarta.yml` file from this repository, then click `Next`.
+- Provide the necessary variables and follow remaining instructions.
+
 ## Xarta Customization
 
 - You may configure styling for classes `xarta-card`, `xarta-title`, `xarta-excerpt`, `xarta-updated-at`, `xarta-content`, `xarta-footer`, `xarta-custom-logo`, `xarta-default-logo` to further customize your card.
