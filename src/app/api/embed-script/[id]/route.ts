@@ -30,7 +30,8 @@ export async function GET(
             // Listen for messages from the iframe to adjust the height
             window.addEventListener('message', function(event) {
                 if (event.data.postId === postId && event.data.height) {
-                    iframe.style.height = event.data.height + 'px';
+                    // TODO: Verify, add 2px to height to avoid border bugs
+                    iframe.style.height = (event.data.height + 2) + 'px';
                 }
             });
 
