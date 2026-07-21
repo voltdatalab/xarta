@@ -6,7 +6,16 @@ import { getXartaConfig } from "@/config/getConfig";
 import { getLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 
-export default async function EmbeddedPage({ params }: { params: { id: string } }) {
+type EmbedTheme = 'light' | 'dark';
+
+function normalizeTheme(theme?: string): EmbedTheme {
+    return theme === 'dark' ? 'dark' : 'light';
+}
+
+export default async function EmbeddedPage({ params, searchParams }: {
+    params: { id: string },
+    searchParams?: { theme?: string }
+}) {
 
     const config = await getXartaConfig();
 
@@ -50,9 +59,10 @@ export default async function EmbeddedPage({ params }: { params: { id: string } 
     const codeInjectionData = await resCodeInjection.json();
 
     const locale = await getLocale();
+    const initialTheme = normalizeTheme(searchParams?.theme);
 
     return (
-        post ? <EmbeddedClient config={config} locale={locale} post={post} postId={params.id} settings={settingsData} globalCodeInjection={codeInjectionData} /> : 
-        <RetryFetchPostEmbed config={config} locale={locale} postId={params.id} settings={settingsData} globalCodeInjection={codeInjectionData}  />
+        post ? <EmbeddedClient config={config} locale={locale} post={post} postId={params.id} settings={settingsData} globalCodeInjection={codeInjectionData} initialTheme={initialTheme} /> :
+        <RetryFetchPostEmbed config={config} locale={locale} postId={params.id} settings={settingsData} globalCodeInjection={codeInjectionData} initialTheme={initialTheme} />
     );
 }

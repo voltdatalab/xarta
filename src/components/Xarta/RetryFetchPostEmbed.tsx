@@ -7,7 +7,7 @@ import { useTranslations } from "next-intl";
 
 
 export const RetryFetchPostEmbed = (
-    { postId, settings, globalCodeInjection, locale, config }: 
+    { postId, settings, globalCodeInjection, locale, config, initialTheme }:
     CommonEmbedProps & {locale: string} & {config: ConfigPublicRootUrl}) => {
 
     const t = useTranslations('strings');
@@ -29,5 +29,5 @@ export const RetryFetchPostEmbed = (
 
     }, [postId]);
 
-    return <>{post ? <EmbeddedClient config={config} post={post} postId={postId} settings={settings} globalCodeInjection={globalCodeInjection} locale={locale} /> : t('LOADING_DRAFT_TEXT')}</>;
+    return <>{post ? <EmbeddedClient config={config} post={post} postId={postId} settings={settings} globalCodeInjection={globalCodeInjection} locale={locale} initialTheme={initialTheme} /> : t('LOADING_DRAFT_TEXT')}</>;
 };

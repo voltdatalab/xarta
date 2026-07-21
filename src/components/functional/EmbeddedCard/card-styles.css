@@ -1,12 +1,56 @@
-/* These are the default styles for a xarta card */
+/* Theme-aware defaults for embedded Xarta cards. The host theme is forwarded
+   by the embed script and applied to the isolated iframe container. */
+html:has(.xarta-embed),
+body:has(.xarta-embed) {
+    background: transparent;
+}
+
+.xarta-embed {
+    --xarta-card-background: #f7f7f8;
+    --xarta-card-text: #202124;
+    --xarta-card-muted-text: #52525b;
+    --xarta-card-footer-background: #e7e7e7;
+    --xarta-card-border: #6b5cc5;
+    --xarta-card-link: #4b31dd;
+
+    color: var(--xarta-card-text);
+    background: transparent;
+}
+
+.xarta-embed[data-color-scheme="dark"] {
+    --xarta-card-background: #1b1b1e;
+    --xarta-card-text: #f3f3f5;
+    --xarta-card-muted-text: #c9c9d1;
+    --xarta-card-footer-background: #25252a;
+    --xarta-card-border: #7869d4;
+    --xarta-card-link: #b8adff;
+}
+
+.xarta-card {
+    color: var(--xarta-card-text);
+    background: var(--xarta-card-background);
+    border-color: var(--xarta-card-border);
+}
+
+.xarta-description,
+.xarta-excerpt {
+    color: var(--xarta-card-muted-text);
+}
+
+.xarta-footer {
+    color: var(--xarta-card-text);
+    background: var(--xarta-card-footer-background);
+}
+
 .xarta-card-styles {
+    color: var(--xarta-card-text);
 
     p {
         margin-bottom: 12px !important;
     }
 
     a {
-        color: #4b31dd !important;
+        color: var(--xarta-card-link) !important;
         text-decoration: underline !important;
     }
 
@@ -27,22 +71,53 @@
     }
 
     h1, h2, h3 {
-        color: black; /* Default text color */
-        font-weight: bold; /* Headers are typically bold */
+        color: var(--xarta-card-text);
+        font-weight: bold;
     }
-    
+
     h1 {
-        font-size: 2em; /* Larger font size for h1 */
-        margin: 0.67em 0; /* Default top and bottom margin */
+        font-size: 2em;
+        margin: 0.67em 0;
     }
-    
+
     h2 {
-        font-size: 1.5em; /* Smaller font size than h1 */
-        margin: 0.75em 0; /* Default top and bottom margin */
+        font-size: 1.5em;
+        margin: 0.75em 0;
     }
-    
+
     h3 {
-        font-size: 1.17em; /* Smaller font size than h2 */
-        margin: 0.83em 0; /* Default top and bottom margin */
+        font-size: 1.17em;
+        margin: 0.83em 0;
     }
+}
+
+.xarta-footer a {
+    color: var(--xarta-card-link);
+}
+
+/* Card authors can inject their own light-theme CSS. Keep those styles in
+   light mode, but prevent fixed dark text colours from becoming unreadable
+   when the host asks the isolated iframe to render in dark mode. */
+.xarta-embed[data-color-scheme="dark"] .xarta-card .xarta-title {
+    color: var(--xarta-card-link) !important;
+}
+
+.xarta-embed[data-color-scheme="dark"] .xarta-card .xarta-description,
+.xarta-embed[data-color-scheme="dark"] .xarta-card .xarta-excerpt,
+.xarta-embed[data-color-scheme="dark"] .xarta-card .xarta-footer span {
+    color: var(--xarta-card-muted-text) !important;
+}
+
+.xarta-embed[data-color-scheme="dark"] .xarta-card .xarta-content,
+.xarta-embed[data-color-scheme="dark"] .xarta-card .xarta-content p,
+.xarta-embed[data-color-scheme="dark"] .xarta-card .xarta-content li,
+.xarta-embed[data-color-scheme="dark"] .xarta-card .xarta-content strong,
+.xarta-embed[data-color-scheme="dark"] .xarta-card .xarta-footer {
+    color: var(--xarta-card-text) !important;
+}
+
+.xarta-embed[data-color-scheme="dark"] .xarta-card a:link:not(:has(img)),
+.xarta-embed[data-color-scheme="dark"] .xarta-card a:visited:not(:has(img)),
+.xarta-embed[data-color-scheme="dark"] .xarta-card a:hover:not(:has(img)) {
+    color: var(--xarta-card-link) !important;
 }
