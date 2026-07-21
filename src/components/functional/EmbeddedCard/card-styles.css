@@ -94,3 +94,30 @@ body:has(.xarta-embed) {
 .xarta-footer a {
     color: var(--xarta-card-link);
 }
+
+/* Card authors can inject their own light-theme CSS. Keep those styles in
+   light mode, but prevent fixed dark text colours from becoming unreadable
+   when the host asks the isolated iframe to render in dark mode. */
+.xarta-embed[data-color-scheme="dark"] .xarta-card .xarta-title {
+    color: var(--xarta-card-link) !important;
+}
+
+.xarta-embed[data-color-scheme="dark"] .xarta-card .xarta-description,
+.xarta-embed[data-color-scheme="dark"] .xarta-card .xarta-excerpt,
+.xarta-embed[data-color-scheme="dark"] .xarta-card .xarta-footer span {
+    color: var(--xarta-card-muted-text) !important;
+}
+
+.xarta-embed[data-color-scheme="dark"] .xarta-card .xarta-content,
+.xarta-embed[data-color-scheme="dark"] .xarta-card .xarta-content p,
+.xarta-embed[data-color-scheme="dark"] .xarta-card .xarta-content li,
+.xarta-embed[data-color-scheme="dark"] .xarta-card .xarta-content strong,
+.xarta-embed[data-color-scheme="dark"] .xarta-card .xarta-footer {
+    color: var(--xarta-card-text) !important;
+}
+
+.xarta-embed[data-color-scheme="dark"] .xarta-card a:link:not(:has(img)),
+.xarta-embed[data-color-scheme="dark"] .xarta-card a:visited:not(:has(img)),
+.xarta-embed[data-color-scheme="dark"] .xarta-card a:hover:not(:has(img)) {
+    color: var(--xarta-card-link) !important;
+}
