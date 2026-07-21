@@ -65,9 +65,11 @@ export function EmbeddedClient(
         }
 
         window.addEventListener('message', handleParentMessage);
+        const initialHeightFrame = window.requestAnimationFrame(postHeight);
 
         // Cleanup observer on component unmount
         return () => {
+            window.cancelAnimationFrame(initialHeightFrame);
             resizeObserver.disconnect();
             window.removeEventListener('message', handleParentMessage);
         };
